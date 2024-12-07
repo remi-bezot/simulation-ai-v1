@@ -1,0 +1,44 @@
+# Environnements
+.env
+config/env/*.env
+
+# Dépendances Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+
+# Dépendances Node.js
+node_modules/
+yarn.lock
+
+# Fichiers temporaires ou systèmes
+*.log
+*.swp
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+
+# Tests et couverture
+coverage/
+*.coverage
+.cache/
+
+# Artéfacts de build
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# Dépendances spécifiques
+src/backend/app/infrastructure/database/scripts/*.sql
+
+# Exclure les données sensibles ou temporaires
+data/
