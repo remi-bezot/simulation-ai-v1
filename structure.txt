@@ -1,0 +1,88 @@
+.
+|-- .github
+|   `-- workflows
+|-- README.md
+|-- config
+|   `-- env
+|       `-- development.env
+|-- docker-compose.yml
+|-- shared
+|   |-- kafka
+|   `-- nginx
+|-- src
+|   |-- backend
+|   |   |-- app
+|   |   |   |-- application
+|   |   |   |   |-- services
+|   |   |   |   |   |-- agent_service.py
+|   |   |   |   |   `-- multiverse_service.py
+|   |   |   |   `-- use_cases
+|   |   |   |       |-- process_event.py
+|   |   |   |       `-- run_simulation.py
+|   |   |   |-- core
+|   |   |   |   |-- agents
+|   |   |   |   |   |-- actions
+|   |   |   |   |   |   `-- agent_action.py
+|   |   |   |   |   |-- behaviors
+|   |   |   |   |   |   `-- agent_behavior.py
+|   |   |   |   |   `-- types
+|   |   |   |   |       `-- agent_type.py
+|   |   |   |   |-- events
+|   |   |   |   |   `-- event_definitions.py
+|   |   |   |   |-- genetics
+|   |   |   |   |   `-- genetic_algorithm.py
+|   |   |   |   |-- multiverse
+|   |   |   |   |   `-- multiverse_manager.py
+|   |   |   |   `-- resources
+|   |   |   |       `-- resource_manager.py
+|   |   |   |-- infrastructure
+|   |   |   |   |-- database
+|   |   |   |   |   |-- migrations
+|   |   |   |   |   `-- scripts
+|   |   |   |   |-- messaging
+|   |   |   |   |-- monitoring
+|   |   |   |   `-- storage
+|   |   |   |-- main.py
+|   |   |   |-- metrics
+|   |   |   `-- routers
+|   |   |       |-- agents_router.py
+|   |   |       `-- multiverse_router.py
+|   |   |-- docker
+|   |   |   |-- db
+|   |   |   |   |-- Dockerfile
+|   |   |   |   `-- init.sql
+|   |   |   |-- nginx
+|   |   |   |   `-- Dockerfile
+|   |   |   `-- redis
+|   |   |       `-- Dockerfile
+|   |   |-- monitoring
+|   |   |   `-- docker
+|   |   |       `-- prometheus
+|   |   |           `-- {grafana
+|   |   |               |-- dashboards}
+|   |   |               `-- datasources}
+|   |   `-- requirements.txt
+|   `-- frontend
+|       |-- components
+|       |   |-- agent
+|       |   |-- multiverse
+|       |   |-- shared
+|       |   |   `-- header.tsx
+|       |   `-- simulation
+|       |-- docker
+|       |   `-- Dockerfile
+|       |-- package.json
+|       |-- pages
+|       |   |-- dashboard
+|       |   |-- home
+|       |   `-- simulation
+|       `-- styles
+|           `-- global.css
+|-- structure.txt
+`-- tests
+    |-- backend
+    `-- frontend
+        |-- integration
+        `-- unit
+
+58 directories, 27 files

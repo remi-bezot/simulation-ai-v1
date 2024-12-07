@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      context: ./src/backend/docker
+    container_name: backend
+    ports:
+      - "8000:8000"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+  frontend:
+    build:
+      context: ./src/frontend/docker
+    container_name: frontend
+    ports:
+      - "3000:3000"
