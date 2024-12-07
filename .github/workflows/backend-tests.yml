@@ -1,4 +1,4 @@
-name: Backend Tests
+name: CI Tests
 
 on:
   push:
@@ -11,38 +11,41 @@ on:
       - dev
 
 jobs:
-  test:
+  backend-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
+      - name: Run Backend Tests
+        run: |
+          docker-compose -f docker-compose.test.yml up --build
 
-      - name: Cache pip
+  frontend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Cache Node.js modules
         uses: actions/cache@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
+            ${{ runner.os }}-npm-
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r src/backend/requirements.txt
+          cd src/frontend
+          yarn install
 
-      - name: Verify pytest is installed
-        run: pip show pytest
-
-      - name: Lint code
+      - name: Run frontend tests
         run: |
-          pip install flake8
-          flake8 src/backend
-
-      - name: Run tests
-        run: |
-          pytest src/backend/tests
+          cd src/frontend
+          yarn test
