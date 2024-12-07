@@ -35,6 +35,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r src/backend/requirements.txt
 
+      - name: Verify pytest is installed
+        run: pip show pytest
+
       - name: Lint code
         run: |
           pip install flake8
