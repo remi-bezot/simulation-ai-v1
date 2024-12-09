@@ -1,15 +1,49 @@
 .
 |-- README.md
-|-- config
-|   `-- env
-|       `-- development.env
+|-- allfiles.txt
 |-- docker
 |   |-- backend
+|   |   `-- Dockerfile
+|   |-- db
 |   |   |-- Dockerfile
-|   |   `-- requirements.txt
-|   `-- frontend
+|   |   `-- init.sql
+|   |-- frontend
+|   |   `-- Dockerfile
+|   |-- nginx
+|   |   |-- Dockerfile
+|   |   |-- conf.d
+|   |   |   `-- default.conf
+|   |   `-- nginx.conf
+|   `-- redis
 |       `-- Dockerfile
 |-- docker-compose.yml
+|-- files.txt
+|-- k8s
+|   |-- configmaps
+|   |   `-- env-configmap.yaml
+|   |-- deployments
+|   |   |-- backend-deployment.yaml
+|   |   |-- db-deployment.yaml
+|   |   |-- frontend-deployment.yaml
+|   |   |-- nginx-deployment.yaml
+|   |   |-- redis-deployment.yaml
+|   |   |-- test-backend-job.yaml
+|   |   `-- test-frontend-job.yaml
+|   |-- pvc
+|   |   |-- postgres-pvc.yaml
+|   |   `-- redis-pvc.yaml
+|   |-- services
+|   |   |-- backend-service.yaml
+|   |   |-- db-service.yaml
+|   |   |-- frontend-service.yaml
+|   |   |-- nginx-service.yaml
+|   |   `-- redis-service.yaml
+|   `-- volumes
+|       |-- frontend-claim0-persistentvolumeclaim.yaml
+|       |-- nginx-claim0-persistentvolumeclaim.yaml
+|       |-- nginx-claim1-persistentvolumeclaim.yaml
+|       |-- postgres-data-persistentvolumeclaim.yaml
+|       `-- redis-data-persistentvolumeclaim.yaml
 |-- shared
 |   |-- kafka
 |   `-- nginx
@@ -47,7 +81,6 @@
 |   |   |   |   |-- monitoring
 |   |   |   |   `-- storage
 |   |   |   |-- main.py
-|   |   |   |-- metrics
 |   |   |   `-- routers
 |   |   |       |-- agents_router.py
 |   |   |       `-- multiverse_router.py
@@ -56,15 +89,17 @@
 |   |   |   |   |-- Dockerfile
 |   |   |   |   `-- init.sql
 |   |   |   |-- nginx
-|   |   |   |   `-- Dockerfile
+|   |   |   |   |-- Dockerfile
+|   |   |   |   `-- default.conf
 |   |   |   `-- redis
 |   |   |       `-- Dockerfile
-|   |   `-- monitoring
-|   |       `-- docker
-|   |           `-- prometheus
-|   |               `-- {grafana
-|   |                   |-- dashboards}
-|   |                   `-- datasources}
+|   |   |-- monitoring
+|   |   |   `-- docker
+|   |   |       `-- prometheus
+|   |   |           `-- {grafana
+|   |   |               |-- dashboards}
+|   |   |               `-- datasources}
+|   |   `-- requirements.txt
 |   `-- frontend
 |       |-- components
 |       |   |-- agent
@@ -72,8 +107,10 @@
 |       |   |-- shared
 |       |   |   `-- header.tsx
 |       |   `-- simulation
+|       |       `-- simulation_controls.tsx
 |       |-- docker
-|       |-- jest.config.js
+|       |-- index.ts
+|       |-- jest-1.config.js
 |       |-- node_modules
 |       |   |-- @alloc
 |       |   |   `-- quick-lru
@@ -39434,61 +39471,71 @@
 |       |-- pages
 |       |   |-- dashboard
 |       |   |-- home
+|       |   |   `-- index.tsx
 |       |   `-- simulation
-|       |-- setupTests.ts
+|       |-- public
+|       |   `-- index.html
 |       |-- styles
 |       |   `-- global.css
+|       |-- tsconfig.json
 |       `-- yarn.lock
 |-- structure.txt
-`-- tests
-    |-- backend
-    |   |-- Dockerfile
-    |   |-- app
-    |   |   |-- application
-    |   |   |   |-- services
-    |   |   |   |   |-- agent_service.py
-    |   |   |   |   `-- multiverse_service.py
-    |   |   |   `-- use_cases
-    |   |   |       |-- process_event.py
-    |   |   |       `-- run_simulation.py
-    |   |   |-- core
-    |   |   |   |-- agents
-    |   |   |   |   |-- actions
-    |   |   |   |   |   `-- agent_action.py
-    |   |   |   |   |-- behaviors
-    |   |   |   |   |   `-- agent_behavior.py
-    |   |   |   |   `-- types
-    |   |   |   |       `-- agent_type.py
-    |   |   |   |-- events
-    |   |   |   |   `-- event_definitions.py
-    |   |   |   |-- genetics
-    |   |   |   |   `-- genetic_algorithm.py
-    |   |   |   |-- multiverse
-    |   |   |   |   `-- multiverse_manager.py
-    |   |   |   `-- resources
-    |   |   |       `-- resource_manager.py
-    |   |   |-- infrastructure
-    |   |   |   |-- database
-    |   |   |   |   |-- migrations
-    |   |   |   |   `-- scripts
-    |   |   |   |-- messaging
-    |   |   |   |-- monitoring
-    |   |   |   `-- storage
-    |   |   |-- main.py
-    |   |   |-- metrics
-    |   |   `-- routers
-    |   |       |-- agents_router.py
-    |   |       `-- multiverse_router.py
-    |   |-- requirements.txt
-    |   |-- test_routers.py
-    |   `-- test_services.py
-    `-- frontend
-        |-- Dockerfile
-        |-- integration
-        |-- package.json
-        |-- unit
-        |   |-- test_components.tsx
-        |   `-- test_pages.tsx
-        `-- yarn.lock
+|-- structure_actuelle.txt
+|-- tests
+|   |-- backend
+|   |   |-- Dockerfile
+|   |   |-- app
+|   |   |   |-- application
+|   |   |   |   |-- services
+|   |   |   |   |   |-- agent_service.py
+|   |   |   |   |   `-- multiverse_service.py
+|   |   |   |   `-- use_cases
+|   |   |   |       |-- process_event.py
+|   |   |   |       `-- run_simulation.py
+|   |   |   |-- core
+|   |   |   |   |-- agents
+|   |   |   |   |   |-- actions
+|   |   |   |   |   |   `-- agent_action.py
+|   |   |   |   |   |-- behaviors
+|   |   |   |   |   |   `-- agent_behavior.py
+|   |   |   |   |   `-- types
+|   |   |   |   |       `-- agent_type.py
+|   |   |   |   |-- events
+|   |   |   |   |   `-- event_definitions.py
+|   |   |   |   |-- genetics
+|   |   |   |   |   `-- genetic_algorithm.py
+|   |   |   |   |-- multiverse
+|   |   |   |   |   `-- multiverse_manager.py
+|   |   |   |   `-- resources
+|   |   |   |       `-- resource_manager.py
+|   |   |   |-- infrastructure
+|   |   |   |   |-- database
+|   |   |   |   |   |-- migrations
+|   |   |   |   |   `-- scripts
+|   |   |   |   |-- messaging
+|   |   |   |   |-- monitoring
+|   |   |   |   `-- storage
+|   |   |   |-- main.py
+|   |   |   |-- metrics
+|   |   |   `-- routers
+|   |   |       |-- agents_router.py
+|   |   |       `-- multiverse_router.py
+|   |   |-- requirements.txt
+|   |   |-- test_routers.py
+|   |   |-- test_services.py
+|   |   `-- tests
+|   `-- frontend
+|       |-- Dockerfile
+|       |-- babel.config.js
+|       |-- integration
+|       |-- jest.config.js
+|       |-- package.json
+|       |-- setupTests.ts
+|       |-- unit
+|       |   |-- test_components.test.tsx
+|       |   `-- test_pages.test.tsx
+|       `-- yarn.lock
+|-- tests.txt
+`-- testsFiles.txt
 
-4397 directories, 35094 files
+4406 directories, 35132 files

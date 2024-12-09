@@ -5,16 +5,38 @@
 |       `-- development.env
 |-- docker
 |   |-- backend
-|   |   |-- Dockerfile
-|   |   `-- requirements.txt
 |   `-- frontend
-|       `-- Dockerfile
 |-- docker-compose.yml
+|-- k8s
+|   |-- backend-deployment.yaml
+|   |-- backend-service.yaml
+|   |-- configmaps
+|   |   `-- env-configmap.yaml
+|   |-- db-deployment.yaml
+|   |-- db-service.yaml
+|   |-- env-configmap.yaml
+|   |-- frontend-claim0-persistentvolumeclaim.yaml
+|   |-- frontend-deployment.yaml
+|   |-- frontend-service.yaml
+|   |-- nginx-claim0-persistentvolumeclaim.yaml
+|   |-- nginx-claim1-persistentvolumeclaim.yaml
+|   |-- nginx-deployment.yaml
+|   |-- nginx-service.yaml
+|   |-- postgres-data-persistentvolumeclaim.yaml
+|   |-- pvc
+|   |   |-- postgres-pvc.yaml
+|   |   `-- redis-pvc.yaml
+|   |-- redis-data-persistentvolumeclaim.yaml
+|   |-- redis-deployment.yaml
+|   |-- redis-service.yaml
+|   |-- test-backend-deployment.yaml
+|   `-- test-frontend-deployment.yaml
 |-- shared
 |   |-- kafka
 |   `-- nginx
 |-- src
 |   |-- backend
+|   |   |-- Dockerfile
 |   |   |-- app
 |   |   |   |-- application
 |   |   |   |   |-- services
@@ -56,22 +78,19 @@
 |   |   |   |   |-- Dockerfile
 |   |   |   |   `-- init.sql
 |   |   |   |-- nginx
-|   |   |   |   `-- Dockerfile
+|   |   |   |   |-- Dockerfile
+|   |   |   |   `-- default.conf
 |   |   |   `-- redis
 |   |   |       `-- Dockerfile
-|   |   `-- monitoring
-|   |       `-- docker
-|   |           `-- prometheus
-|   |               `-- {grafana
-|   |                   |-- dashboards}
-|   |                   `-- datasources}
+|   |   |-- monitoring
+|   |   |   `-- docker
+|   |   |       `-- prometheus
+|   |   |           `-- {grafana
+|   |   |               |-- dashboards}
+|   |   |               `-- datasources}
+|   |   `-- requirements.txt
 |   `-- frontend
-|       |-- components
-|       |   |-- agent
-|       |   |-- multiverse
-|       |   |-- shared
-|       |   |   `-- header.tsx
-|       |   `-- simulation
+|       |-- Dockerfile
 |       |-- docker
 |       |-- jest.config.js
 |       |-- node_modules
@@ -39431,15 +39450,26 @@
 |       |       |-- package.json
 |       |       `-- readme.md
 |       |-- package.json
-|       |-- pages
-|       |   |-- dashboard
-|       |   |-- home
-|       |   `-- simulation
+|       |-- public
+|       |   `-- index.html
 |       |-- setupTests.ts
+|       |-- src
+|       |   |-- components
+|       |   |   |-- agent
+|       |   |   |-- multiverse
+|       |   |   |-- shared
+|       |   |   |   `-- header.tsx
+|       |   |   `-- simulation
+|       |   |-- index.js
+|       |   `-- pages
+|       |       |-- dashboard
+|       |       |-- home
+|       |       `-- simulation
 |       |-- styles
 |       |   `-- global.css
 |       `-- yarn.lock
 |-- structure.txt
+|-- structure_actuelle.txt
 `-- tests
     |-- backend
     |   |-- Dockerfile
@@ -39491,4 +39521,4 @@
         |   `-- test_pages.tsx
         `-- yarn.lock
 
-4397 directories, 35094 files
+4402 directories, 35119 files

@@ -17,14 +17,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Docker and Docker Compose
+      - name: Install kubectl
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
 
-      - name: Run Backend Tests
+      - name: Deploy Backend Test Job
         run: |
-          docker-compose -f docker-compose.yml run --rm backend pytest tests/backend
+          kubectl apply -f k8s/deployments/test-backend-job.yaml
+
+      - name: Wait for Job Completion
+        run: |
+          kubectl wait --for=condition=complete --timeout=300s job/test-backend
+
+      - name: Get Logs
+        run: |
+          kubectl logs job/test-backend
+
+      - name: Clean up Kubernetes Jobs
+        if: always()
+        run: |
+          kubectl delete job test-backend || true
 
   frontend-tests:
     runs-on: ubuntu-latest
@@ -32,25 +46,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-
-      - name: Cache Node.js modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
-
-      - name: Install dependencies
+      - name: Install kubectl
         run: |
-          cd src/frontend
-          yarn install
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
 
-      - name: Run frontend tests
+      - name: Deploy Frontend Test Job
         run: |
-          cd src/frontend
-          yarn test
+          kubectl apply -f k8s/deployments/test-frontend-job.yaml
+
+      - name: Wait for Job Completion
+        run: |
+          kubectl wait --for=condition=complete --timeout=300s job/test-frontend
+
+      - name: Get Logs
+        run: |
+          kubectl logs job/test-frontend
+
+      - name: Clean up Kubernetes Jobs
+        if: always()
+        run: |
+          kubectl delete job test-frontend || true

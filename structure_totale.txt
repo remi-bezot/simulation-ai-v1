@@ -1,15 +1,49 @@
 .
 |-- README.md
-|-- config
-|   `-- env
-|       `-- development.env
+|-- allfiles.txt
 |-- docker
 |   |-- backend
+|   |   `-- Dockerfile
+|   |-- db
 |   |   |-- Dockerfile
-|   |   `-- requirements.txt
-|   `-- frontend
+|   |   `-- init.sql
+|   |-- frontend
+|   |   `-- Dockerfile
+|   |-- nginx
+|   |   |-- Dockerfile
+|   |   |-- conf.d
+|   |   |   `-- default.conf
+|   |   `-- nginx.conf
+|   `-- redis
 |       `-- Dockerfile
 |-- docker-compose.yml
+|-- files.txt
+|-- k8s
+|   |-- configmaps
+|   |   `-- env-configmap.yaml
+|   |-- deployments
+|   |   |-- backend-deployment.yaml
+|   |   |-- db-deployment.yaml
+|   |   |-- frontend-deployment.yaml
+|   |   |-- nginx-deployment.yaml
+|   |   |-- redis-deployment.yaml
+|   |   |-- test-backend-job.yaml
+|   |   `-- test-frontend-job.yaml
+|   |-- pvc
+|   |   |-- postgres-pvc.yaml
+|   |   `-- redis-pvc.yaml
+|   |-- services
+|   |   |-- backend-service.yaml
+|   |   |-- db-service.yaml
+|   |   |-- frontend-service.yaml
+|   |   |-- nginx-service.yaml
+|   |   `-- redis-service.yaml
+|   `-- volumes
+|       |-- frontend-claim0-persistentvolumeclaim.yaml
+|       |-- nginx-claim0-persistentvolumeclaim.yaml
+|       |-- nginx-claim1-persistentvolumeclaim.yaml
+|       |-- postgres-data-persistentvolumeclaim.yaml
+|       `-- redis-data-persistentvolumeclaim.yaml
 |-- shared
 |   |-- kafka
 |   `-- nginx
@@ -47,33 +81,19 @@
 |   |   |   |   |-- monitoring
 |   |   |   |   `-- storage
 |   |   |   |-- main.py
-|   |   |   |-- metrics
 |   |   |   `-- routers
 |   |   |       |-- agents_router.py
 |   |   |       `-- multiverse_router.py
-|   |   |-- docker
-|   |   |   |-- db
-|   |   |   |   |-- Dockerfile
-|   |   |   |   `-- init.sql
-|   |   |   |-- nginx
-|   |   |   |   `-- Dockerfile
-|   |   |   `-- redis
-|   |   |       `-- Dockerfile
-|   |   `-- monitoring
-|   |       `-- docker
-|   |           `-- prometheus
-|   |               `-- {grafana
-|   |                   |-- dashboards}
-|   |                   `-- datasources}
+|   |   |-- monitoring
+|   |   |   `-- docker
+|   |   |       `-- prometheus
+|   |   |           `-- {grafana
+|   |   |               |-- dashboards}
+|   |   |               `-- datasources}
+|   |   `-- requirements.txt
 |   `-- frontend
-|       |-- components
-|       |   |-- agent
-|       |   |-- multiverse
-|       |   |-- shared
-|       |   |   `-- header.tsx
-|       |   `-- simulation
 |       |-- docker
-|       |-- jest.config.js
+|       |-- jest-1.config.js
 |       |-- node_modules
 |       |   |-- @alloc
 |       |   |   `-- quick-lru
@@ -3204,6 +3224,29 @@
 |       |   |           |   `-- types.d.ts
 |       |   |           `-- options
 |       |   |               `-- index.d.ts
+|       |   |-- @remix-run
+|       |   |   `-- router
+|       |   |       |-- CHANGELOG.md
+|       |   |       |-- LICENSE.md
+|       |   |       |-- README.md
+|       |   |       |-- dist
+|       |   |       |   |-- history.d.ts
+|       |   |       |   |-- index.d.ts
+|       |   |       |   |-- router.cjs.js
+|       |   |       |   |-- router.cjs.js.map
+|       |   |       |   |-- router.d.ts
+|       |   |       |   |-- router.js
+|       |   |       |   |-- router.js.map
+|       |   |       |   |-- router.umd.js
+|       |   |       |   |-- router.umd.js.map
+|       |   |       |   |-- router.umd.min.js
+|       |   |       |   |-- router.umd.min.js.map
+|       |   |       |   `-- utils.d.ts
+|       |   |       |-- history.ts
+|       |   |       |-- index.ts
+|       |   |       |-- package.json
+|       |   |       |-- router.ts
+|       |   |       `-- utils.ts
 |       |   |-- @rollup
 |       |   |   |-- plugin-babel
 |       |   |   |   |-- CHANGELOG.md
@@ -4000,6 +4043,11 @@
 |       |   |   |   |-- parser-typescript.d.ts
 |       |   |   |   |-- parser-yaml.d.ts
 |       |   |   |   `-- standalone.d.ts
+|       |   |   |-- prop-types
+|       |   |   |   |-- LICENSE
+|       |   |   |   |-- README.md
+|       |   |   |   |-- index.d.ts
+|       |   |   |   `-- package.json
 |       |   |   |-- q
 |       |   |   |   |-- LICENSE
 |       |   |   |   |-- README.md
@@ -4015,6 +4063,28 @@
 |       |   |   |   |-- README.md
 |       |   |   |   |-- index.d.ts
 |       |   |   |   `-- package.json
+|       |   |   |-- react
+|       |   |   |   |-- LICENSE
+|       |   |   |   |-- README.md
+|       |   |   |   |-- global.d.ts
+|       |   |   |   |-- index.d.ts
+|       |   |   |   |-- jsx-dev-runtime.d.ts
+|       |   |   |   |-- jsx-runtime.d.ts
+|       |   |   |   |-- package.json
+|       |   |   |   `-- ts5.0
+|       |   |   |       |-- global.d.ts
+|       |   |   |       |-- index.d.ts
+|       |   |   |       |-- jsx-dev-runtime.d.ts
+|       |   |   |       `-- jsx-runtime.d.ts
+|       |   |   |-- react-dom
+|       |   |   |   |-- LICENSE
+|       |   |   |   |-- README.md
+|       |   |   |   |-- client.d.ts
+|       |   |   |   |-- index.d.ts
+|       |   |   |   |-- package.json
+|       |   |   |   |-- server.d.ts
+|       |   |   |   `-- test-utils
+|       |   |   |       `-- index.d.ts
 |       |   |   |-- resolve
 |       |   |   |   |-- LICENSE
 |       |   |   |   |-- README.md
@@ -7252,6 +7322,111 @@
 |       |   |   |   `-- zh_TW.json
 |       |   |   |-- package.json
 |       |   |   `-- sri-history.json
+|       |   |-- axios
+|       |   |   |-- CHANGELOG.md
+|       |   |   |-- LICENSE
+|       |   |   |-- MIGRATION_GUIDE.md
+|       |   |   |-- README.md
+|       |   |   |-- SECURITY.md
+|       |   |   |-- dist
+|       |   |   |   |-- axios.js
+|       |   |   |   |-- axios.js.map
+|       |   |   |   |-- axios.min.js
+|       |   |   |   |-- axios.min.js.map
+|       |   |   |   |-- browser
+|       |   |   |   |   |-- axios.cjs
+|       |   |   |   |   `-- axios.cjs.map
+|       |   |   |   |-- esm
+|       |   |   |   |   |-- axios.js
+|       |   |   |   |   |-- axios.js.map
+|       |   |   |   |   |-- axios.min.js
+|       |   |   |   |   `-- axios.min.js.map
+|       |   |   |   `-- node
+|       |   |   |       |-- axios.cjs
+|       |   |   |       `-- axios.cjs.map
+|       |   |   |-- index.d.cts
+|       |   |   |-- index.d.ts
+|       |   |   |-- index.js
+|       |   |   |-- lib
+|       |   |   |   |-- adapters
+|       |   |   |   |   |-- README.md
+|       |   |   |   |   |-- adapters.js
+|       |   |   |   |   |-- fetch.js
+|       |   |   |   |   |-- http.js
+|       |   |   |   |   `-- xhr.js
+|       |   |   |   |-- axios.js
+|       |   |   |   |-- cancel
+|       |   |   |   |   |-- CancelToken.js
+|       |   |   |   |   |-- CanceledError.js
+|       |   |   |   |   `-- isCancel.js
+|       |   |   |   |-- core
+|       |   |   |   |   |-- Axios.js
+|       |   |   |   |   |-- AxiosError.js
+|       |   |   |   |   |-- AxiosHeaders.js
+|       |   |   |   |   |-- InterceptorManager.js
+|       |   |   |   |   |-- README.md
+|       |   |   |   |   |-- buildFullPath.js
+|       |   |   |   |   |-- dispatchRequest.js
+|       |   |   |   |   |-- mergeConfig.js
+|       |   |   |   |   |-- settle.js
+|       |   |   |   |   `-- transformData.js
+|       |   |   |   |-- defaults
+|       |   |   |   |   |-- index.js
+|       |   |   |   |   `-- transitional.js
+|       |   |   |   |-- env
+|       |   |   |   |   |-- README.md
+|       |   |   |   |   |-- classes
+|       |   |   |   |   |   `-- FormData.js
+|       |   |   |   |   `-- data.js
+|       |   |   |   |-- helpers
+|       |   |   |   |   |-- AxiosTransformStream.js
+|       |   |   |   |   |-- AxiosURLSearchParams.js
+|       |   |   |   |   |-- HttpStatusCode.js
+|       |   |   |   |   |-- README.md
+|       |   |   |   |   |-- ZlibHeaderTransformStream.js
+|       |   |   |   |   |-- bind.js
+|       |   |   |   |   |-- buildURL.js
+|       |   |   |   |   |-- callbackify.js
+|       |   |   |   |   |-- combineURLs.js
+|       |   |   |   |   |-- composeSignals.js
+|       |   |   |   |   |-- cookies.js
+|       |   |   |   |   |-- deprecatedMethod.js
+|       |   |   |   |   |-- formDataToJSON.js
+|       |   |   |   |   |-- formDataToStream.js
+|       |   |   |   |   |-- fromDataURI.js
+|       |   |   |   |   |-- isAbsoluteURL.js
+|       |   |   |   |   |-- isAxiosError.js
+|       |   |   |   |   |-- isURLSameOrigin.js
+|       |   |   |   |   |-- null.js
+|       |   |   |   |   |-- parseHeaders.js
+|       |   |   |   |   |-- parseProtocol.js
+|       |   |   |   |   |-- progressEventReducer.js
+|       |   |   |   |   |-- readBlob.js
+|       |   |   |   |   |-- resolveConfig.js
+|       |   |   |   |   |-- speedometer.js
+|       |   |   |   |   |-- spread.js
+|       |   |   |   |   |-- throttle.js
+|       |   |   |   |   |-- toFormData.js
+|       |   |   |   |   |-- toURLEncodedForm.js
+|       |   |   |   |   |-- trackStream.js
+|       |   |   |   |   `-- validator.js
+|       |   |   |   |-- platform
+|       |   |   |   |   |-- browser
+|       |   |   |   |   |   |-- classes
+|       |   |   |   |   |   |   |-- Blob.js
+|       |   |   |   |   |   |   |-- FormData.js
+|       |   |   |   |   |   |   `-- URLSearchParams.js
+|       |   |   |   |   |   `-- index.js
+|       |   |   |   |   |-- common
+|       |   |   |   |   |   `-- utils.js
+|       |   |   |   |   |-- index.js
+|       |   |   |   |   `-- node
+|       |   |   |   |       |-- classes
+|       |   |   |   |       |   |-- FormData.js
+|       |   |   |   |       |   `-- URLSearchParams.js
+|       |   |   |   |       `-- index.js
+|       |   |   |   `-- utils.js
+|       |   |   `-- package.json
 |       |   |-- axobject-query
 |       |   |   |-- LICENSE
 |       |   |   |-- README.md
@@ -17552,6 +17727,12 @@
 |       |   |   |       |   `-- parse.js
 |       |   |   |       `-- package.json
 |       |   |   `-- package.json
+|       |   |-- csstype
+|       |   |   |-- LICENSE
+|       |   |   |-- README.md
+|       |   |   |-- index.d.ts
+|       |   |   |-- index.js.flow
+|       |   |   `-- package.json
 |       |   |-- damerau-levenshtein
 |       |   |   |-- CHANGELOG.md
 |       |   |   |-- LICENSE
@@ -26477,6 +26658,15 @@
 |       |   |   |   |   |-- escodegen.js
 |       |   |   |   |   |-- node_modules
 |       |   |   |   |   `-- package.json
+|       |   |   |   |-- form-data
+|       |   |   |   |   |-- License
+|       |   |   |   |   |-- Readme.md
+|       |   |   |   |   |-- index.d.ts
+|       |   |   |   |   |-- lib
+|       |   |   |   |   |   |-- browser.js
+|       |   |   |   |   |   |-- form_data.js
+|       |   |   |   |   |   `-- populate.js
+|       |   |   |   |   `-- package.json
 |       |   |   |   `-- ws
 |       |   |   |       |-- LICENSE
 |       |   |   |       |-- README.md
@@ -30536,6 +30726,42 @@
 |       |   |   |   |-- Str.js
 |       |   |   |   `-- index.js
 |       |   |   `-- package.json
+|       |   |-- prettier
+|       |   |   |-- LICENSE
+|       |   |   |-- README.md
+|       |   |   |-- bin-prettier.js
+|       |   |   |-- cli.js
+|       |   |   |-- doc.js
+|       |   |   |-- esm
+|       |   |   |   |-- parser-angular.mjs
+|       |   |   |   |-- parser-babel.mjs
+|       |   |   |   |-- parser-espree.mjs
+|       |   |   |   |-- parser-flow.mjs
+|       |   |   |   |-- parser-glimmer.mjs
+|       |   |   |   |-- parser-graphql.mjs
+|       |   |   |   |-- parser-html.mjs
+|       |   |   |   |-- parser-markdown.mjs
+|       |   |   |   |-- parser-meriyah.mjs
+|       |   |   |   |-- parser-postcss.mjs
+|       |   |   |   |-- parser-typescript.mjs
+|       |   |   |   |-- parser-yaml.mjs
+|       |   |   |   `-- standalone.mjs
+|       |   |   |-- index.js
+|       |   |   |-- package.json
+|       |   |   |-- parser-angular.js
+|       |   |   |-- parser-babel.js
+|       |   |   |-- parser-espree.js
+|       |   |   |-- parser-flow.js
+|       |   |   |-- parser-glimmer.js
+|       |   |   |-- parser-graphql.js
+|       |   |   |-- parser-html.js
+|       |   |   |-- parser-markdown.js
+|       |   |   |-- parser-meriyah.js
+|       |   |   |-- parser-postcss.js
+|       |   |   |-- parser-typescript.js
+|       |   |   |-- parser-yaml.js
+|       |   |   |-- standalone.js
+|       |   |   `-- third-party.js
 |       |   |-- pretty-bytes
 |       |   |   |-- index.d.ts
 |       |   |   |-- index.js
@@ -30771,6 +30997,12 @@
 |       |   |   |       |   `-- ipaddr.js.d.ts
 |       |   |   |       `-- package.json
 |       |   |   `-- package.json
+|       |   |-- proxy-from-env
+|       |   |   |-- LICENSE
+|       |   |   |-- README.md
+|       |   |   |-- index.js
+|       |   |   |-- package.json
+|       |   |   `-- test.js
 |       |   |-- psl
 |       |   |   |-- LICENSE
 |       |   |   |-- README.md
@@ -31036,6 +31268,56 @@
 |       |   |   |   `-- react-refresh-runtime.production.min.js
 |       |   |   |-- package.json
 |       |   |   `-- runtime.js
+|       |   |-- react-router
+|       |   |   |-- CHANGELOG.md
+|       |   |   |-- LICENSE.md
+|       |   |   |-- README.md
+|       |   |   |-- dist
+|       |   |   |   |-- index.d.ts
+|       |   |   |   |-- index.js
+|       |   |   |   |-- index.js.map
+|       |   |   |   |-- lib
+|       |   |   |   |   |-- components.d.ts
+|       |   |   |   |   |-- context.d.ts
+|       |   |   |   |   |-- deprecations.d.ts
+|       |   |   |   |   `-- hooks.d.ts
+|       |   |   |   |-- main.js
+|       |   |   |   |-- react-router.development.js
+|       |   |   |   |-- react-router.development.js.map
+|       |   |   |   |-- react-router.production.min.js
+|       |   |   |   |-- react-router.production.min.js.map
+|       |   |   |   `-- umd
+|       |   |   |       |-- react-router.development.js
+|       |   |   |       |-- react-router.development.js.map
+|       |   |   |       |-- react-router.production.min.js
+|       |   |   |       `-- react-router.production.min.js.map
+|       |   |   `-- package.json
+|       |   |-- react-router-dom
+|       |   |   |-- CHANGELOG.md
+|       |   |   |-- LICENSE.md
+|       |   |   |-- README.md
+|       |   |   |-- dist
+|       |   |   |   |-- dom.d.ts
+|       |   |   |   |-- index.d.ts
+|       |   |   |   |-- index.js
+|       |   |   |   |-- index.js.map
+|       |   |   |   |-- main.js
+|       |   |   |   |-- react-router-dom.development.js
+|       |   |   |   |-- react-router-dom.development.js.map
+|       |   |   |   |-- react-router-dom.production.min.js
+|       |   |   |   |-- react-router-dom.production.min.js.map
+|       |   |   |   |-- server.d.ts
+|       |   |   |   |-- server.js
+|       |   |   |   |-- server.mjs
+|       |   |   |   `-- umd
+|       |   |   |       |-- react-router-dom.development.js
+|       |   |   |       |-- react-router-dom.development.js.map
+|       |   |   |       |-- react-router-dom.production.min.js
+|       |   |   |       `-- react-router-dom.production.min.js.map
+|       |   |   |-- package.json
+|       |   |   |-- server.d.ts
+|       |   |   |-- server.js
+|       |   |   `-- server.mjs
 |       |   |-- react-scripts
 |       |   |   |-- LICENSE
 |       |   |   |-- README.md
@@ -39431,64 +39713,88 @@
 |       |       |-- package.json
 |       |       `-- readme.md
 |       |-- package.json
-|       |-- pages
-|       |   |-- dashboard
-|       |   |-- home
-|       |   `-- simulation
-|       |-- setupTests.ts
+|       |-- public
+|       |   `-- index.html
+|       |-- src
+|       |   |-- App.tsx
+|       |   |-- assets
+|       |   |-- components
+|       |   |   |-- agent
+|       |   |   |-- multiverse
+|       |   |   |-- shared
+|       |   |   |   |-- Footer.tsx
+|       |   |   |   `-- Header.tsx
+|       |   |   `-- simulation
+|       |   |       `-- simulation_controls.tsx
+|       |   |-- index.css
+|       |   |-- index.tsx
+|       |   |-- pages
+|       |   |   |-- dashboard
+|       |   |   |-- home
+|       |   |   |   `-- Home.tsx
+|       |   |   `-- simulation
+|       |   `-- tsconfig.json
 |       |-- styles
 |       |   `-- global.css
 |       `-- yarn.lock
 |-- structure.txt
-`-- tests
-    |-- backend
-    |   |-- Dockerfile
-    |   |-- app
-    |   |   |-- application
-    |   |   |   |-- services
-    |   |   |   |   |-- agent_service.py
-    |   |   |   |   `-- multiverse_service.py
-    |   |   |   `-- use_cases
-    |   |   |       |-- process_event.py
-    |   |   |       `-- run_simulation.py
-    |   |   |-- core
-    |   |   |   |-- agents
-    |   |   |   |   |-- actions
-    |   |   |   |   |   `-- agent_action.py
-    |   |   |   |   |-- behaviors
-    |   |   |   |   |   `-- agent_behavior.py
-    |   |   |   |   `-- types
-    |   |   |   |       `-- agent_type.py
-    |   |   |   |-- events
-    |   |   |   |   `-- event_definitions.py
-    |   |   |   |-- genetics
-    |   |   |   |   `-- genetic_algorithm.py
-    |   |   |   |-- multiverse
-    |   |   |   |   `-- multiverse_manager.py
-    |   |   |   `-- resources
-    |   |   |       `-- resource_manager.py
-    |   |   |-- infrastructure
-    |   |   |   |-- database
-    |   |   |   |   |-- migrations
-    |   |   |   |   `-- scripts
-    |   |   |   |-- messaging
-    |   |   |   |-- monitoring
-    |   |   |   `-- storage
-    |   |   |-- main.py
-    |   |   |-- metrics
-    |   |   `-- routers
-    |   |       |-- agents_router.py
-    |   |       `-- multiverse_router.py
-    |   |-- requirements.txt
-    |   |-- test_routers.py
-    |   `-- test_services.py
-    `-- frontend
-        |-- Dockerfile
-        |-- integration
-        |-- package.json
-        |-- unit
-        |   |-- test_components.tsx
-        |   `-- test_pages.tsx
-        `-- yarn.lock
+|-- structure_actuelle.txt
+|-- structure_totale.txt
+|-- tests
+|   |-- backend
+|   |   |-- Dockerfile
+|   |   |-- app
+|   |   |   |-- application
+|   |   |   |   |-- services
+|   |   |   |   |   |-- agent_service.py
+|   |   |   |   |   `-- multiverse_service.py
+|   |   |   |   `-- use_cases
+|   |   |   |       |-- process_event.py
+|   |   |   |       `-- run_simulation.py
+|   |   |   |-- core
+|   |   |   |   |-- agents
+|   |   |   |   |   |-- actions
+|   |   |   |   |   |   `-- agent_action.py
+|   |   |   |   |   |-- behaviors
+|   |   |   |   |   |   `-- agent_behavior.py
+|   |   |   |   |   `-- types
+|   |   |   |   |       `-- agent_type.py
+|   |   |   |   |-- events
+|   |   |   |   |   `-- event_definitions.py
+|   |   |   |   |-- genetics
+|   |   |   |   |   `-- genetic_algorithm.py
+|   |   |   |   |-- multiverse
+|   |   |   |   |   `-- multiverse_manager.py
+|   |   |   |   `-- resources
+|   |   |   |       `-- resource_manager.py
+|   |   |   |-- infrastructure
+|   |   |   |   |-- database
+|   |   |   |   |   |-- migrations
+|   |   |   |   |   `-- scripts
+|   |   |   |   |-- messaging
+|   |   |   |   |-- monitoring
+|   |   |   |   `-- storage
+|   |   |   |-- main.py
+|   |   |   |-- metrics
+|   |   |   `-- routers
+|   |   |       |-- agents_router.py
+|   |   |       `-- multiverse_router.py
+|   |   |-- requirements.txt
+|   |   |-- test_routers.py
+|   |   |-- test_services.py
+|   |   `-- tests
+|   `-- frontend
+|       |-- Dockerfile
+|       |-- babel.config.js
+|       |-- integration
+|       |-- jest.config.js
+|       |-- package.json
+|       |-- setupTests.ts
+|       |-- unit
+|       |   |-- test_components.test.tsx
+|       |   `-- test_pages.test.tsx
+|       `-- yarn.lock
+|-- tests.txt
+`-- testsFiles.txt
 
-4397 directories, 35094 files
+4444 directories, 35353 files

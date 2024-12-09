@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test-backend
+  labels:
+    app: test-backend
+spec:
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+        app: test-backend
+    spec:
+      containers:
+        - name: test-backend
+          image: test-backend:latest
+          imagePullPolicy: Never
+          args:
+            - pytest
+            - /app/tests
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://user:password@db:5432/test_db"
+            - name: REDIS_URL
+              value: "redis://redis:6379"
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+          volumeMounts:
+            - name: temp-results
+              mountPath: /app/results
+      volumes:
+        - name: temp-results
+          emptyDir: {}
+      restartPolicy: Never

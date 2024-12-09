@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test-frontend
+spec:
+  template:
+    metadata:
+      labels:
+        app: test-frontend
+    spec:
+      containers:
+        - name: test-frontend
+          image: test-frontend:latest
+          args:
+            - yarn
+            - test
+          env:
+            - name: API_URL
+              value: "http://backend:8000"
+            - name: FRONTEND_ENV
+              value: "test"
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+          volumeMounts:
+            - name: frontend-temp-results
+              mountPath: /usr/src/app/results
+      volumes:
+        - name: frontend-temp-results
+          emptyDir: {}
+      restartPolicy: Never
