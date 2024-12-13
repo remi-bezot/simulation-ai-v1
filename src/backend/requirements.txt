@@ -1,8 +1,35 @@
+# Framework web
 fastapi
+
+# ORM et bases de données
 sqlalchemy
 pydantic
 psycopg2-binary
+asyncpg
+
+# Cache et interconnexion
 redis
+
+# Monitoring et métriques
 prometheus-client
-pytest
+
+# Serveur ASGI
 uvicorn[standard]
+
+# Calcul et visualisation (optionnel mais utile)
+numpy
+pandas
+matplotlib
+scipy
+seaborn
+
+# Machine Learning (optionnel, pour IA avancée)
+tensorflow
+torch
+scikit-learn
+
+# Gestion des fichiers pour FastAPI
+python-multipart
+
+# Rendu de templates (optionnel, si nécessaire)
+jinja2

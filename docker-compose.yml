@@ -1,5 +1,6 @@
+version: "3.9"
+
 services:
-  # Base de données PostgreSQL
   db:
     image: postgres:15
     container_name: postgres
@@ -14,8 +15,10 @@ services:
       interval: 10s
       retries: 5
       start_period: 30s
+    restart: always
+    networks:
+      - app-network
 
-  # Redis (cache)
   redis:
     image: redis:7-alpine
     container_name: redis
@@ -28,8 +31,10 @@ services:
       interval: 10s
       retries: 3
       timeout: 5s
+    restart: always
+    networks:
+      - app-network
 
-  # Backend (API)
   backend:
     build:
       context: ./src/backend
@@ -39,34 +44,24 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=${DATABASE_URL}
-    volumes:
-      - ./src/backend:/app
-    command: >
-      dockerize -wait tcp://db:5432 -wait tcp://redis:6379 -timeout 30s \
-      uvicorn app.main:app --host 0.0.0.0 --port 8000
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
-
-  # Test Backend (pour les tests unitaires)
-  test-backend:
-    build:
-      context: ./src/backend
-      dockerfile: ../../docker/backend/Dockerfile
-    container_name: test-backend
-    depends_on:
-      db:
-        condition: service_healthy
-    volumes:
-      - ./src/backend:/app/backend
-      - ./tests/backend:/app/tests
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      retries: 5
+      start_period: 60s
+      timeout: 10s
     command: >
-      dockerize -wait tcp://db:5432 -timeout 30s \
-      pytest /app/tests
+      dockerize -wait tcp://db:5432 -wait tcp://redis:6379 -timeout 30s
+      uvicorn app.main:app --host 0.0.0.0 --port 8000
+    restart: always
+    networks:
+      - app-network
 
-  # Frontend (React)
   frontend:
     build:
       context: ./src/frontend
@@ -75,27 +70,70 @@ services:
     depends_on:
       backend:
         condition: service_healthy
-    volumes:
-      - ./src/frontend:/usr/src/app
-    command: yarn build && yarn start # Assurez-vous de faire un build avant de lancer l'app React
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: always
+    networks:
+      - app-network
 
-  # Serveur Nginx (pour servir le frontend)
   nginx:
     build:
       context: ./docker/nginx
       dockerfile: Dockerfile
     container_name: nginx
-    ports:
-      - "80:80"
     depends_on:
-      backend:
-        condition: service_healthy
       frontend:
         condition: service_healthy
+    ports:
+      - "80:80"
     volumes:
       - ./docker/nginx/conf.d:/etc/nginx/conf.d
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      retries: 3
+    restart: always
+    networks:
+      - app-network
+
+  test-backend:
+    build:
+      context: ./tests/backend
+      dockerfile: ../../docker/tests/backend/Dockerfile
+    container_name: test-backend
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/test_db
+    command: ["pytest", "/app/tests"]
+
+  test-frontend:
+    build:
+      context: ./tests/frontend
+      dockerfile: ../../docker/tests/frontend/Dockerfile
+    container_name: test-frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - app-network
+    command: ["yarn", "test"]
 
 volumes:
   postgres_data:
   redis_data:
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES6", // Définit la cible pour le JavaScript généré
+    "module": "ESNext", // Utilisation des modules ES
+    "jsx": "react-jsx", // Pour la compatibilité avec React 17+
+    "strict": true, // Active les vérifications strictes
+    "esModuleInterop": true, // Pour une meilleure compatibilité avec les modules CommonJS
+    "skipLibCheck": true, // Ignore les erreurs dans les fichiers de type
+    "forceConsistentCasingInFileNames": true, // Assure une cohérence dans la casse
+    "moduleResolution": "node", // Résolution des modules comme Node.js
+    "allowJs": true, // Autorise les fichiers .js
+    "outDir": "./build", // Répertoire de sortie pour le JavaScript généré
+    "rootDir": "./src", // Répertoire racine pour TypeScript
+    "declaration": true, // Génère des fichiers .d.ts pour les définitions de type
+    "sourceMap": true, // Génère des fichiers source map
+    "baseUrl": ".", // Définit la base pour les chemins relatifs
+    "paths": {
+      "src/*": ["src/*"] // Alias pour référencer les modules dans `src`
+    },
+    "resolveJsonModule": true // Permet d'importer des fichiers JSON
+  },
+  "include": ["src/**/*", "tests/**/*"], // Fichiers à inclure
+  "exclude": ["node_modules", "build"] // Répertoires à exclure
+}

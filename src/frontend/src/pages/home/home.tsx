@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "../../components/shared/Header"; // Chemin vers le composant Header
-import Footer from "../../components/shared/Footer"; // Assurez-vous que Footer existe
+import Header from "src/components/shared/Header"; // Utilisation de l'alias
+import Footer from "src/components/shared/Footer"; // Utilisation de l'alias
 
 const Home: React.FC = () => {
   return (

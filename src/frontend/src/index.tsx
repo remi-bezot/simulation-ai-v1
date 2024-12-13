@@ -1,12 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
+import MainApp from "src/MainApp";
+import "src/index.css"; // Utilisation de l'alias
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <MainApp />
   </React.StrictMode>
 );

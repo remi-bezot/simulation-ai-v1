@@ -1,0 +1,16 @@
+# Framework web
+fastapi
+
+# ORM et bases de données
+sqlalchemy
+pydantic
+psycopg2-binary
+
+# Cache et métriques
+redis
+prometheus-client
+
+# Outils de tests
+pytest
+pytest-asyncio
+httpx
