@@ -1,5 +1,5 @@
 from app.core.agents.actions.base_agent_action import AgentAction
-from app.application.interfaces.gather_resource_action_interface import (
+from app.core.agents.actions.interfaces.i_gather_resource_action import (
     IGatherResourceAction,
 )
 
@@ -26,18 +26,17 @@ class GatherResourceAction(AgentAction, IGatherResourceAction):
 
         :param agent: L'agent pour lequel l'action est initialisée.
         """
-        print(
-            f"Initialisation de la collecte de ressources de type {self.resource_type} par l'agent {agent}"
-        )
+        # Implémentation de l'initialisation
+        pass
 
     def execute(self, agent):
         """
-        Fait collecter des ressources à l'agent.
+        Exécute l'action de collecte de ressources sur l'agent donné.
 
-        :param agent: L'agent qui collecte les ressources.
+        :param agent: L'agent sur lequel l'action est exécutée.
         """
-        # Logique pour la collecte de ressources
-        print(f"L'agent {agent} collecte des ressources de type {self.resource_type}")
+        # Implémentation de l'exécution
+        pass
 
     def finalize(self, agent):
         """
@@ -45,4 +44,5 @@ class GatherResourceAction(AgentAction, IGatherResourceAction):
 
         :param agent: L'agent pour lequel l'action est finalisée.
         """
-        print(f"Finalisation de la collecte de ressources de l'agent {agent}")
+        # Implémentation de la finalisation
+        pass

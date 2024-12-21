@@ -1,4 +1,4 @@
-from app.application.interfaces.agent_action_interface import IAgentAction
+from app.core.agents.actions.interfaces.i_agent_action import IAgentAction
 
 
 class AgentAction(IAgentAction):
@@ -20,7 +20,7 @@ class AgentAction(IAgentAction):
 
         :param agent: L'agent sur lequel l'action est exécutée.
         """
-        raise NotImplementedError("Subclasses should implement this method!")
+        pass
 
     def finalize(self, agent):
         """

@@ -1,5 +1,5 @@
 from app.core.agents.actions.base_agent_action import AgentAction
-from app.application.interfaces.communicate_action_interface import ICommunicateAction
+from app.core.agents.actions.interfaces.i_communicate_action import ICommunicateAction
 
 
 class CommunicateAction(AgentAction, ICommunicateAction):
@@ -24,18 +24,17 @@ class CommunicateAction(AgentAction, ICommunicateAction):
 
         :param agent: L'agent pour lequel l'action est initialisée.
         """
-        print(
-            f"Initialisation de la communication de l'agent {agent} avec le message : {self.message}"
-        )
+        # Implémentation de l'initialisation
+        pass
 
     def execute(self, agent):
         """
-        Fait communiquer l'agent avec un autre agent.
+        Exécute l'action de communication sur l'agent donné.
 
-        :param agent: L'agent qui communique.
+        :param agent: L'agent sur lequel l'action est exécutée.
         """
-        # Logique pour la communication
-        print(f"L'agent {agent} communique : {self.message}")
+        # Implémentation de l'exécution
+        pass
 
     def finalize(self, agent):
         """
@@ -43,4 +42,5 @@ class CommunicateAction(AgentAction, ICommunicateAction):
 
         :param agent: L'agent pour lequel l'action est finalisée.
         """
-        print(f"Finalisation de la communication de l'agent {agent}")
+        # Implémentation de la finalisation
+        pass

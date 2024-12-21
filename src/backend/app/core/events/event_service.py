@@ -2,6 +2,7 @@ import logging
 from datetime import datetime
 from typing import List, Callable, Dict, Any
 import json
+from app.core.events.interfaces.i_event_manager import IEventManager
 
 # Configuration du logger centralisé
 logging.basicConfig(
@@ -10,7 +11,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class EventManager:
+class EventManager(IEventManager):
     """
     Gestionnaire d'événements modulaire avec support pour les logs,
     les observateurs, l'exportation des événements et l'importation.
@@ -20,31 +21,45 @@ class EventManager:
         self._event_log: List[Dict[str, Any]] = []
         self._observers: List[Callable[[str, datetime], None]] = []
 
-    def _log_event(self, event_name: str) -> Dict[str, Any]:
-        timestamp = datetime.now()
-        event_details = {"event_name": event_name, "timestamp": timestamp.isoformat()}
-        self._event_log.append(event_details)
-        logger.info("Événement enregistré : '%s' à %s", event_name, timestamp)
-        return event_details
+    def log_event(self, event: Dict[str, Any]):
+        """
+        Enregistre un événement dans le journal des événements.
 
-    def register_observer(self, observer: Callable[[str, datetime], None]) -> None:
-        if observer not in self._observers:
-            self._observers.append(observer)
-            logger.info("Observateur enregistré : %s", observer.__name__)
+        :param event: L'événement à enregistrer.
+        """
+        self._event_log.append(event)
+        logger.info(f"Event logged: {event}")
 
-    def trigger_event(self, event_name: str) -> Dict[str, Any]:
-        if not event_name.strip():
-            raise ValueError("Le nom de l'événement ne peut pas être vide.")
-        event_details = self._log_event(event_name)
+    def add_observer(self, observer: Callable[[str, datetime], None]):
+        """
+        Ajoute un observateur pour les événements.
 
+        :param observer: La fonction observateur.
+        """
+        self._observers.append(observer)
+
+    def notify_observers(self, event_name: str, timestamp: datetime):
+        """
+        Notifie tous les observateurs d'un événement.
+
+        :param event_name: Le nom de l'événement.
+        :param timestamp: Le timestamp de l'événement.
+        """
         for observer in self._observers:
-            try:
-                observer(event_name, datetime.fromisoformat(event_details["timestamp"]))
-            except Exception as e:
-                logger.error("Erreur lors de la notification de l'observateur : %s", e)
+            observer(event_name, timestamp)
 
-        return {"message": f"Événement '{event_name}' déclenché avec succès."}
+    def export_events(self) -> str:
+        """
+        Exporte les événements en format JSON.
 
-    def get_event_log(self) -> List[Dict[str, Any]]:
-        logger.info("Historique des événements récupéré.")
-        return self._event_log
+        :return: Les événements en format JSON.
+        """
+        return json.dumps(self._event_log, default=str)
+
+    def import_events(self, events_json: str):
+        """
+        Importe les événements à partir d'un format JSON.
+
+        :param events_json: Les événements en format JSON.
+        """
+        self._event_log = json.loads(events_json)

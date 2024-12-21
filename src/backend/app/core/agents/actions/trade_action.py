@@ -1,5 +1,5 @@
 from app.core.agents.actions.base_agent_action import AgentAction
-from app.application.interfaces.trade_action_interface import ITradeAction
+from app.core.agents.actions.interfaces.i_trade_action import ITradeAction
 
 
 class TradeAction(AgentAction, ITradeAction):
@@ -33,20 +33,17 @@ class TradeAction(AgentAction, ITradeAction):
 
         :param agent: L'agent pour lequel l'action est initialisée.
         """
-        print(
-            f"Initialisation de l'échange de ressources avec {self.target} par l'agent {agent}"
-        )
+        # Implémentation de l'initialisation
+        pass
 
     def execute(self, agent):
         """
-        Fait échanger des ressources à l'agent avec un autre agent.
+        Exécute l'action d'échange sur l'agent donné.
 
-        :param agent: L'agent qui échange.
+        :param agent: L'agent sur lequel l'action est exécutée.
         """
-        # Logique pour échanger des ressources
-        print(
-            f"L'agent {agent} échange des ressources avec {self.target} : {self.resources}"
-        )
+        # Implémentation de l'exécution
+        pass
 
     def finalize(self, agent):
         """
@@ -54,4 +51,5 @@ class TradeAction(AgentAction, ITradeAction):
 
         :param agent: L'agent pour lequel l'action est finalisée.
         """
-        print(f"Finalisation de l'échange de l'agent {agent}")
+        # Implémentation de la finalisation
+        pass

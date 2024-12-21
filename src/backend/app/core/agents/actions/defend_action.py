@@ -1,5 +1,5 @@
 from app.core.agents.actions.base_agent_action import AgentAction
-from app.application.interfaces.defend_action_interface import IDefendAction
+from app.core.agents.actions.interfaces.i_defend_action import IDefendAction
 
 
 class DefendAction(AgentAction, IDefendAction):
@@ -24,18 +24,17 @@ class DefendAction(AgentAction, IDefendAction):
 
         :param agent: L'agent pour lequel l'action est initialisée.
         """
-        print(
-            f"Initialisation de la défense de la position {self.position} par l'agent {agent}"
-        )
+        # Implémentation de l'initialisation
+        pass
 
     def execute(self, agent):
         """
-        Fait défendre une position à l'agent.
+        Exécute l'action de défense sur l'agent donné.
 
-        :param agent: L'agent qui défend.
+        :param agent: L'agent sur lequel l'action est exécutée.
         """
-        # Logique pour défendre la position
-        print(f"L'agent {agent} défend la position {self.position}")
+        # Implémentation de l'exécution
+        pass
 
     def finalize(self, agent):
         """
@@ -43,4 +42,5 @@ class DefendAction(AgentAction, IDefendAction):
 
         :param agent: L'agent pour lequel l'action est finalisée.
         """
-        print(f"Finalisation de la défense de l'agent {agent}")
+        # Implémentation de la finalisation
+        pass

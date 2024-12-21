@@ -1,5 +1,5 @@
 from app.core.agents.actions.base_agent_action import AgentAction
-from app.application.interfaces.rest_action_interface import IRestAction
+from app.core.agents.actions.interfaces.i_rest_action import IRestAction
 
 
 class RestAction(AgentAction, IRestAction):
@@ -21,8 +21,8 @@ class RestAction(AgentAction, IRestAction):
 
         :param agent: L'agent qui se repose.
         """
-        # Logique pour faire reposer l'agent
-        print(f"L'agent {agent} se repose")
+        # Implémentation de l'exécution
+        pass
 
     def finalize(self, agent):
         """
@@ -30,4 +30,5 @@ class RestAction(AgentAction, IRestAction):
 
         :param agent: L'agent pour lequel l'action est finalisée.
         """
-        print(f"Finalisation du repos de l'agent {agent}")
+        # Implémentation de la finalisation
+        pass

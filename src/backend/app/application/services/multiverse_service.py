@@ -21,23 +21,12 @@ class MultiverseService(IMultiverseService):
     def create_multiverse(self, data: MultiverseCreate) -> Multiverse:
         """
         Crée un nouveau multivers.
-
-        :param data: Données pour créer le multivers.
-        :return: Instance du multivers créé.
         """
-        if not data.name.strip():
-            logger.error("Le nom du multivers est vide ou invalide.")
-            raise ValueError("Le nom du multivers est obligatoire.")
-        new_multiverse = Multiverse(
-            name=data.name.strip(),
-            description=data.description or "",
-            properties=data.properties or {},
-        )
-        multiverse = self.repository.create(new_multiverse)
-        logger.info(
-            f"Multivers '{multiverse.name}' créé avec succès (ID={multiverse.id})."
-        )
-        return multiverse
+        new_multiverse = Multiverse(**data.dict())
+        self.repository.add(new_multiverse)
+        self.repository.commit()
+        self.repository.refresh(new_multiverse)
+        return new_multiverse
 
     @handle_sqlalchemy_errors
     def list_multiverses(
@@ -96,18 +85,12 @@ class MultiverseService(IMultiverseService):
         return multiverse
 
     @handle_sqlalchemy_errors
-    def delete_multiverse(self, multiverse_id: int) -> Dict[str, str]:
+    def delete_multiverse(self, multiverse_id: int):
         """
-        Supprime un multivers.
-
-        :param multiverse_id: ID du multivers à supprimer.
-        :return: Message de confirmation.
-        :raises MultiverseNotFoundError: Si le multivers n'existe pas.
+        Supprime un multivers par son ID.
         """
-        multiverse = self.repository.get_by_id(multiverse_id)
+        multiverse = self.repository.get(multiverse_id)
         if not multiverse:
-            logger.error(f"Multivers non trouvé pour suppression : ID={multiverse_id}")
-            raise MultiverseNotFoundError(multiverse_id)
+            raise MultiverseNotFoundError(f"Multivers avec l'ID {multiverse_id} non trouvé.")
         self.repository.delete(multiverse)
-        logger.info(f"Multivers ID={multiverse_id} supprimé avec succès.")
-        return {"message": f"Multivers ID {multiverse_id} supprimé avec succès."}
+        self.repository.commit()

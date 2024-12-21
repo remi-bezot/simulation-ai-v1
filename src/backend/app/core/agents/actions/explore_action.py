@@ -1,5 +1,5 @@
 from app.core.agents.actions.base_agent_action import AgentAction
-from app.application.interfaces.explore_action_interface import IExploreAction
+from app.core.agents.actions.interfaces.i_explore_action import IExploreAction
 
 
 class ExploreAction(AgentAction, IExploreAction):
@@ -24,18 +24,17 @@ class ExploreAction(AgentAction, IExploreAction):
 
         :param agent: L'agent pour lequel l'action est initialisée.
         """
-        print(
-            f"Initialisation de l'exploration de la zone {self.area} par l'agent {agent}"
-        )
+        # Implémentation de l'initialisation
+        pass
 
     def execute(self, agent):
         """
-        Fait explorer une zone à l'agent.
+        Exécute l'action d'exploration sur l'agent donné.
 
-        :param agent: L'agent qui explore.
+        :param agent: L'agent sur lequel l'action est exécutée.
         """
-        # Logique pour explorer la zone
-        print(f"L'agent {agent} explore la zone {self.area}")
+        # Implémentation de l'exécution
+        pass
 
     def finalize(self, agent):
         """
@@ -43,4 +42,5 @@ class ExploreAction(AgentAction, IExploreAction):
 
         :param agent: L'agent pour lequel l'action est finalisée.
         """
-        print(f"Finalisation de l'exploration de l'agent {agent}")
+        # Implémentation de la finalisation
+        pass

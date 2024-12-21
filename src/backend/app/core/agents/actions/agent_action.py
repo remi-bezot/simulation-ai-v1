@@ -1,4 +1,4 @@
-from app.application.interfaces.agent_action_interface import IAgentAction
+from app.core.agents.actions.interfaces.i_agent_action import IAgentAction
 
 
 class AgentAction(IAgentAction):
@@ -29,3 +29,33 @@ class AgentAction(IAgentAction):
         :param agent: L'agent pour lequel l'action est finalisée.
         """
         pass
+
+
+class MoveAction(IAgentAction):
+    """
+    Action de déplacement pour un agent.
+    """
+
+    def initialize(self, agent):
+        """
+        Initialise l'action de déplacement pour l'agent donné.
+
+        :param agent: L'agent pour lequel l'action est initialisée.
+        """
+        agent.position = (0, 0)
+
+    def execute(self, agent):
+        """
+        Exécute l'action de déplacement sur l'agent donné.
+
+        :param agent: L'agent sur lequel l'action est exécutée.
+        """
+        agent.position = (agent.position[0] + 1, agent.position[1] + 1)
+
+    def finalize(self, agent):
+        """
+        Finalise l'action de déplacement pour l'agent donné.
+
+        :param agent: L'agent pour lequel l'action est finalisée.
+        """
+        agent.position = (0, 0)

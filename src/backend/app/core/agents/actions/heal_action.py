@@ -1,5 +1,5 @@
 from app.core.agents.actions.base_agent_action import AgentAction
-from app.application.interfaces.heal_action_interface import IHealAction
+from app.core.agents.actions.interfaces.i_heal_action import IHealAction
 
 
 class HealAction(AgentAction, IHealAction):
@@ -24,16 +24,17 @@ class HealAction(AgentAction, IHealAction):
 
         :param agent: L'agent pour lequel l'action est initialisée.
         """
-        print(f"Initialisation du soin de l'agent {agent} sur {self.target}")
+        # Implémentation de l'initialisation
+        pass
 
     def execute(self, agent):
         """
-        Fait soigner un autre agent.
+        Exécute l'action de soin sur l'agent donné.
 
-        :param agent: L'agent qui soigne.
+        :param agent: L'agent sur lequel l'action est exécutée.
         """
-        # Logique pour soigner l'agent
-        print(f"L'agent {agent} soigne {self.target}")
+        # Implémentation de l'exécution
+        pass
 
     def finalize(self, agent):
         """
@@ -41,4 +42,5 @@ class HealAction(AgentAction, IHealAction):
 
         :param agent: L'agent pour lequel l'action est finalisée.
         """
-        print(f"Finalisation du soin de l'agent {agent}")
+        # Implémentation de la finalisation
+        pass

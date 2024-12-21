@@ -1,10 +1,9 @@
-from app.core.agents.actions.base_agent_action import AgentAction
-from app.application.interfaces.move_action_interface import IMoveAction
+from app.core.agents.actions.interfaces.i_move_action import IMoveAction
 
 
-class MoveAction(AgentAction, IMoveAction):
+class MoveAction(IMoveAction):
     """
-    Action pour déplacer un agent.
+    Action de déplacement pour un agent.
     """
 
     def __init__(self, direction: str):
@@ -24,16 +23,17 @@ class MoveAction(AgentAction, IMoveAction):
 
         :param agent: L'agent pour lequel l'action est initialisée.
         """
-        print(f"Initialisation du déplacement de l'agent {agent} vers {self.direction}")
+        # Implémentation de l'initialisation
+        pass
 
     def execute(self, agent):
         """
-        Déplace l'agent dans la direction spécifiée.
+        Exécute l'action de déplacement sur l'agent donné.
 
-        :param agent: L'agent à déplacer.
+        :param agent: L'agent sur lequel l'action est exécutée.
         """
-        # Logique pour déplacer l'agent
-        print(f"Déplacement de l'agent {agent} vers {self.direction}")
+        # Implémentation de l'exécution
+        pass
 
     def finalize(self, agent):
         """
@@ -41,4 +41,5 @@ class MoveAction(AgentAction, IMoveAction):
 
         :param agent: L'agent pour lequel l'action est finalisée.
         """
-        print(f"Finalisation du déplacement de l'agent {agent}")
+        # Implémentation de la finalisation
+        pass

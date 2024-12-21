@@ -1,5 +1,5 @@
 from app.core.agents.actions.agent_action import AgentAction
-from app.application.interfaces.build_action_interface import IBuildAction
+from app.core.agents.actions.interfaces.i_build_action import IBuildAction
 
 
 class BuildAction(AgentAction, IBuildAction):
@@ -24,18 +24,17 @@ class BuildAction(AgentAction, IBuildAction):
 
         :param agent: L'agent pour lequel l'action est initialisée.
         """
-        print(
-            f"Initialisation de la construction d'une structure de type {self.structure_type} par l'agent {agent}"
-        )
+        # Implémentation de l'initialisation
+        pass
 
     def execute(self, agent):
         """
-        Fait construire une structure à l'agent.
+        Exécute l'action de construction sur l'agent donné.
 
-        :param agent: L'agent qui construit.
+        :param agent: L'agent sur lequel l'action est exécutée.
         """
-        # Logique pour la construction de la structure
-        print(f"L'agent {agent} construit une structure de type {self.structure_type}")
+        # Implémentation de l'exécution
+        pass
 
     def finalize(self, agent):
         """
@@ -43,4 +42,5 @@ class BuildAction(AgentAction, IBuildAction):
 
         :param agent: L'agent pour lequel l'action est finalisée.
         """
-        print(f"Finalisation de la construction de l'agent {agent}")
+        # Implémentation de la finalisation
+        pass

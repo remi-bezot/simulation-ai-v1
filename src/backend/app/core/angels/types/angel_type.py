@@ -1,4 +1,4 @@
-from app.application.interfaces.angel_type_interface import IAngelType
+from app.core.angels.types.interfaces.i_angel_type import IAngelType
 
 
 class AngelType(IAngelType):

@@ -1,10 +1,9 @@
-from app.application.interfaces.agent_behavior_interface import IAgentBehavior
+from app.core.agents.behaviors.interfaces.i_agent_behavior import IAgentBehavior
 
 
-# Comportements des agents
 class AgentBehavior(IAgentBehavior):
     """
-    Classe de base pour les comportements des agents.
+    Comportement de base pour un agent.
     """
 
     def perform(self, agent):
@@ -13,4 +12,5 @@ class AgentBehavior(IAgentBehavior):
 
         :param agent: L'agent sur lequel le comportement est exécuté.
         """
-        raise NotImplementedError("Subclasses should implement this method!")
+        # Implémentation du comportement
+        pass
