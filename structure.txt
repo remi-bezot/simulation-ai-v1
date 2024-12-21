@@ -1,20 +1,10 @@
 .
 |-- README.md
-|-- allfiles.txt
-|-- app.txt
-|-- backend.txt
 |-- docker-compose.yml
 |-- docs
 |   `-- README.md
-|-- files.txt
-|-- frontend.txt
-|-- lastStructure.txt
-|-- lastStructure1.txt
 |-- projet simulation monde.docx
 |-- scripts
-|-- setup_databases.sh
-|-- setup_frontend_structure.sh
-|-- setup_project.sh
 |-- shared
 |   |-- kafka
 |   `-- nginx
@@ -131,12 +121,17 @@
 |   |   |   |   |   |-- construction_skills.py
 |   |   |   |   |   |-- exceptions
 |   |   |   |   |   |   |-- __init__.py
-|   |   |   |   |   |   `-- agent_exceptions.py
+|   |   |   |   |   |   |-- agent_action_exception.py
+|   |   |   |   |   |   |-- agent_exceptions.py
+|   |   |   |   |   |   `-- metrics_exception.py
 |   |   |   |   |   |-- healing_resource_manager.py
 |   |   |   |   |   |-- healing_skills.py
 |   |   |   |   |   |-- interfaces
+|   |   |   |   |   |   |-- __init__.py
+|   |   |   |   |   |   |-- i_agent_action.py
 |   |   |   |   |   |   |-- i_builder.py
 |   |   |   |   |   |   |-- i_healer.py
+|   |   |   |   |   |   |-- i_metrics_calculator.py
 |   |   |   |   |   |   |-- i_scout.py
 |   |   |   |   |   |   |-- i_soldier.py
 |   |   |   |   |   |   |-- i_trader.py
@@ -156,6 +151,7 @@
 |   |   |   |   |   |   |   |-- durability.py
 |   |   |   |   |   |   |   |-- efficiency.py
 |   |   |   |   |   |   |   |-- metrics.py
+|   |   |   |   |   |   |   |-- metrics_calculator.py
 |   |   |   |   |   |   |   `-- performance.py
 |   |   |   |   |   |   `-- modifiers.py
 |   |   |   |   |   |-- trading_skills.py
@@ -178,6 +174,60 @@
 |   |   |   |   |   |   |   |-- energy.py
 |   |   |   |   |   |   |   |-- experience.py
 |   |   |   |   |   |   |   |-- health.py
+|   |   |   |   |   |   |   |-- needs
+|   |   |   |   |   |   |   |   |-- __init__.py
+|   |   |   |   |   |   |   |   |-- calculators
+|   |   |   |   |   |   |   |   |   `-- priority_calculator.py
+|   |   |   |   |   |   |   |   |-- config
+|   |   |   |   |   |   |   |   |   |-- __init__.py
+|   |   |   |   |   |   |   |   |   `-- need_config.py
+|   |   |   |   |   |   |   |   |-- definitions
+|   |   |   |   |   |   |   |   |   |-- __init__.py
+|   |   |   |   |   |   |   |   |   |-- need_definition.py
+|   |   |   |   |   |   |   |   |   `-- need_definitions_registry.py
+|   |   |   |   |   |   |   |   |-- enums
+|   |   |   |   |   |   |   |   |   |-- __init__.py
+|   |   |   |   |   |   |   |   |   |-- need_category.py
+|   |   |   |   |   |   |   |   |   `-- need_urgency.py
+|   |   |   |   |   |   |   |   |-- exceptions
+|   |   |   |   |   |   |   |   |   |-- __init__.py
+|   |   |   |   |   |   |   |   |   |-- need_registry_exception.py
+|   |   |   |   |   |   |   |   |   `-- need_validation_exception.py
+|   |   |   |   |   |   |   |   |-- handlers
+|   |   |   |   |   |   |   |   |   |-- need_handler.py
+|   |   |   |   |   |   |   |   |   `-- need_validator.py
+|   |   |   |   |   |   |   |   |-- interfaces
+|   |   |   |   |   |   |   |   |   |-- __init__.py
+|   |   |   |   |   |   |   |   |   |-- i_need_manager.py
+|   |   |   |   |   |   |   |   |   |-- i_need_provider.py
+|   |   |   |   |   |   |   |   |   |-- i_need_recorder.py
+|   |   |   |   |   |   |   |   |   |-- i_need_registry.py
+|   |   |   |   |   |   |   |   |   |-- i_need_registry_observer.py
+|   |   |   |   |   |   |   |   |   `-- i_priority_calculator.py
+|   |   |   |   |   |   |   |   |-- manager
+|   |   |   |   |   |   |   |   |   |-- __init__.py
+|   |   |   |   |   |   |   |   |   `-- need_manager.py
+|   |   |   |   |   |   |   |   |-- need_manager.py
+|   |   |   |   |   |   |   |   |-- observers
+|   |   |   |   |   |   |   |   |   |-- __init__.py
+|   |   |   |   |   |   |   |   |   `-- need_registry_observer.py
+|   |   |   |   |   |   |   |   |-- providers
+|   |   |   |   |   |   |   |   |   |-- __init__.py
+|   |   |   |   |   |   |   |   |   `-- default_needs_provider.py
+|   |   |   |   |   |   |   |   |-- recording
+|   |   |   |   |   |   |   |   |   |-- __init__.py
+|   |   |   |   |   |   |   |   |   `-- need_recorder.py
+|   |   |   |   |   |   |   |   |-- strategies
+|   |   |   |   |   |   |   |   |   |-- __init__.py
+|   |   |   |   |   |   |   |   |   `-- priority_strategies.py
+|   |   |   |   |   |   |   |   |-- tracking
+|   |   |   |   |   |   |   |   |   |-- __init__.py
+|   |   |   |   |   |   |   |   |   |-- need_history.py
+|   |   |   |   |   |   |   |   |   `-- need_stats.py
+|   |   |   |   |   |   |   |   `-- validators
+|   |   |   |   |   |   |   |       |-- __init__.py
+|   |   |   |   |   |   |   |       |-- need_definition_validator.py
+|   |   |   |   |   |   |   |       `-- need_validator.py
 |   |   |   |   |   |   |   |-- needs.py
 |   |   |   |   |   |   |   `-- state.py
 |   |   |   |   |   |   |-- healer_agent_type.py
@@ -488,66 +538,59 @@
 |       |   `-- main.css
 |       |-- tsconfig.json
 |       `-- yarn.lock
-|-- src.txt
-|-- srcfrontend.txt
-|-- structure
 |-- structure.txt
-|-- structure_actuelle.txt
-|-- structure_totale.txt
-|-- tests
-|   |-- backend
-|   |   |-- app
-|   |   |   |-- application
-|   |   |   |   |-- services
-|   |   |   |   |   |-- agent_service.py
-|   |   |   |   |   `-- multiverse_service.py
-|   |   |   |   `-- use_cases
-|   |   |   |       |-- process_event.py
-|   |   |   |       `-- run_simulation.py
-|   |   |   |-- core
-|   |   |   |   |-- agents
-|   |   |   |   |   |-- actions
-|   |   |   |   |   |   `-- agent_action.py
-|   |   |   |   |   |-- behaviors
-|   |   |   |   |   |   `-- agent_behavior.py
-|   |   |   |   |   `-- types
-|   |   |   |   |       `-- agent_type.py
-|   |   |   |   |-- events
-|   |   |   |   |   `-- event_definitions.py
-|   |   |   |   |-- genetics
-|   |   |   |   |   `-- genetic_algorithm.py
-|   |   |   |   |-- multiverse
-|   |   |   |   |   `-- multiverse_manager.py
-|   |   |   |   `-- resources
-|   |   |   |       `-- resource_manager.py
-|   |   |   |-- infrastructure
-|   |   |   |   |-- database
-|   |   |   |   |   |-- migrations
-|   |   |   |   |   `-- scripts
-|   |   |   |   |-- messaging
-|   |   |   |   |-- monitoring
-|   |   |   |   `-- storage
-|   |   |   |-- main.py
-|   |   |   |-- metrics
-|   |   |   `-- routers
-|   |   |       |-- agents_router.py
-|   |   |       `-- multiverse_router.py
-|   |   |-- requirements-test.txt
-|   |   |-- test_routers.py
-|   |   |-- test_services.py
-|   |   `-- tests
-|   |-- frontend
-|   |   |-- babel.config.js
-|   |   |-- integration
-|   |   |-- jest.config.js
-|   |   |-- package.json
-|   |   |-- setupTests.ts
-|   |   |-- unit
-|   |   |   |-- test_components.test.tsx
-|   |   |   `-- test_pages.test.tsx
-|   |   `-- yarn.lock
-|   `-- test_multiverse_router.py
-|-- tests.txt
-`-- testsFiles.txt
+`-- tests
+    |-- backend
+    |   |-- app
+    |   |   |-- application
+    |   |   |   |-- services
+    |   |   |   |   |-- agent_service.py
+    |   |   |   |   `-- multiverse_service.py
+    |   |   |   `-- use_cases
+    |   |   |       |-- process_event.py
+    |   |   |       `-- run_simulation.py
+    |   |   |-- core
+    |   |   |   |-- agents
+    |   |   |   |   |-- actions
+    |   |   |   |   |   `-- agent_action.py
+    |   |   |   |   |-- behaviors
+    |   |   |   |   |   `-- agent_behavior.py
+    |   |   |   |   `-- types
+    |   |   |   |       `-- agent_type.py
+    |   |   |   |-- events
+    |   |   |   |   `-- event_definitions.py
+    |   |   |   |-- genetics
+    |   |   |   |   `-- genetic_algorithm.py
+    |   |   |   |-- multiverse
+    |   |   |   |   `-- multiverse_manager.py
+    |   |   |   `-- resources
+    |   |   |       `-- resource_manager.py
+    |   |   |-- infrastructure
+    |   |   |   |-- database
+    |   |   |   |   |-- migrations
+    |   |   |   |   `-- scripts
+    |   |   |   |-- messaging
+    |   |   |   |-- monitoring
+    |   |   |   `-- storage
+    |   |   |-- main.py
+    |   |   |-- metrics
+    |   |   `-- routers
+    |   |       |-- agents_router.py
+    |   |       `-- multiverse_router.py
+    |   |-- requirements-test.txt
+    |   |-- test_routers.py
+    |   |-- test_services.py
+    |   `-- tests
+    |-- frontend
+    |   |-- babel.config.js
+    |   |-- integration
+    |   |-- jest.config.js
+    |   |-- package.json
+    |   |-- setupTests.ts
+    |   |-- unit
+    |   |   |-- test_components.test.tsx
+    |   |   `-- test_pages.test.tsx
+    |   `-- yarn.lock
+    `-- test_multiverse_router.py
 
-161 directories, 389 files
+176 directories, 417 files

@@ -1,12 +1,13 @@
-from app.core.agents.actions.interfaces.i_agent_action import IAgentAction
+from ..interfaces.i_agent_action import IAgentAction
+from ..exceptions.agent_action_exception import AgentActionException
 
 
 class AgentAction(IAgentAction):
     """
-    Classe de base pour les actions spécifiques aux agents.
+    Classe de base pour les actions des agents.
     """
 
-    def initialize(self, agent):
+    def initialize(self, agent) -> None:
         """
         Initialise l'action pour l'agent donné.
 
@@ -14,7 +15,7 @@ class AgentAction(IAgentAction):
         """
         pass
 
-    def execute(self, agent):
+    def execute(self, agent) -> None:
         """
         Exécute l'action sur l'agent donné.
 
@@ -22,7 +23,7 @@ class AgentAction(IAgentAction):
         """
         raise NotImplementedError("Subclasses should implement this method!")
 
-    def finalize(self, agent):
+    def finalize(self, agent) -> None:
         """
         Finalise l'action pour l'agent donné.
 
@@ -31,31 +32,37 @@ class AgentAction(IAgentAction):
         pass
 
 
-class MoveAction(IAgentAction):
+class MoveAction(AgentAction):
     """
     Action de déplacement pour un agent.
     """
 
-    def initialize(self, agent):
+    def __init__(self, destination):
+        self.destination = destination
+
+    def initialize(self, agent) -> None:
         """
         Initialise l'action de déplacement pour l'agent donné.
 
         :param agent: L'agent pour lequel l'action est initialisée.
         """
-        agent.position = (0, 0)
+        agent.set_destination(self.destination)
 
-    def execute(self, agent):
+    def execute(self, agent) -> None:
         """
         Exécute l'action de déplacement sur l'agent donné.
 
         :param agent: L'agent sur lequel l'action est exécutée.
         """
-        agent.position = (agent.position[0] + 1, agent.position[1] + 1)
+        if not agent.move_towards(self.destination):
+            raise AgentActionException(
+                "L'agent ne peut pas se déplacer vers la destination."
+            )
 
-    def finalize(self, agent):
+    def finalize(self, agent) -> None:
         """
         Finalise l'action de déplacement pour l'agent donné.
 
         :param agent: L'agent pour lequel l'action est finalisée.
         """
-        agent.position = (0, 0)
+        agent.clear_destination()

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, List, Optional
+from typing import Dict, List
 from datetime import datetime
 
 
@@ -28,7 +28,7 @@ class INeedRecorder(ABC):
         pass
 
     @abstractmethod
-    def get_last_value(self, need: str) -> Optional[float]:
+    def get_last_value(self, need: str) -> float:
         """
         Récupère la dernière valeur enregistrée pour un besoin.
 
@@ -38,7 +38,7 @@ class INeedRecorder(ABC):
         pass
 
     @abstractmethod
-    def clear_history(self, need: Optional[str] = None) -> None:
+    def clear_history(self, need: str) -> None:
         """
         Efface l'historique d'un ou tous les besoins.
 

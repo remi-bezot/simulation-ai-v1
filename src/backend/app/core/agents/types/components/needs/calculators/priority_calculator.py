@@ -45,11 +45,7 @@ class PriorityCalculator(IPriorityCalculator):
         if not self._validate_inputs(base_priority, urgency, current_value):
             raise ValueError("Valeurs d'entrée invalides")
 
-        return self.strategy.calculate_priority(
-            base_priority=base_priority,
-            urgency_factor=urgency,
-            current_value=current_value,
-        )
+        return self.strategy.calculate_priority(base_priority, urgency, current_value)
 
     def _validate_inputs(
         self, base_priority: int, urgency: float, current_value: float
