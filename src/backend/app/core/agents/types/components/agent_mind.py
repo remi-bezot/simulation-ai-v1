@@ -1,8 +1,8 @@
-from app.core.components.emotions import Emotions
-from app.core.components.needs import Needs
-from app.core.components.state import State
-from app.core.agents.types.interfaces.i_agent_mind import IAgentMind
 from typing import Dict, Optional
+from app.core.agents.types.components.emotions import Emotions
+from app.core.agents.types.components.needs import Needs
+from app.core.agents.types.components.state import State
+from app.core.agents.types.interfaces.i_agent_mind import IAgentMind
 
 
 class AgentMind(IAgentMind):
@@ -14,7 +14,9 @@ class AgentMind(IAgentMind):
         self.experience = 0
 
     def update(self) -> None:
-        """Met à jour l'état mental de l'agent"""
+        """
+        Met à jour l'état mental de l'agent.
+        """
         self.emotions.decay()
         self.needs.update()
         self.state.update_mood(self.emotions.get_mood())
@@ -23,15 +25,11 @@ class AgentMind(IAgentMind):
         """
         Ressent une émotion.
 
-        :return: True si l'émotion est ressentie, False si échec, None si impossible
+        :param emotion: Le type d'émotion ressenti.
+        :param intensity: L'intensité de l'émotion.
+        :return: True si l'émotion est ressentie, False sinon.
         """
-        try:
-            self.emotions.feel_emotion(emotion, intensity)
-            return True
-        except ValueError:
-            return None
-        except Exception:
-            return False
+        return self.emotions.feel(emotion, intensity)
 
     def satisfy_need(self, need: str, amount: float) -> Optional[float]:
         """
@@ -40,7 +38,8 @@ class AgentMind(IAgentMind):
         :return: Quantité satisfaite ou None si le besoin n'existe pas
         """
         try:
-            return self.needs.satisfy_need(need, amount)
+            self.needs.satisfy_need(need, amount)
+            return amount
         except KeyError:
             return None
 

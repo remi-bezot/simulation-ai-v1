@@ -23,7 +23,7 @@ class IAgentBehavior(ABC):
         """
         Ajoute une action à la file d'attente.
 
-        :param action: L'action à ajouter
+        :param action: L'action à ajouter.
         """
         pass
 

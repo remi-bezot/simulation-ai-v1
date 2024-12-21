@@ -7,7 +7,9 @@ class IAgentMind(ABC):
 
     @abstractmethod
     def update(self) -> None:
-        """Met à jour l'état mental de l'agent."""
+        """
+        Met à jour l'état mental de l'agent.
+        """
         pass
 
     @abstractmethod
@@ -15,6 +17,8 @@ class IAgentMind(ABC):
         """
         Ressent une émotion.
 
+        :param emotion: Le type d'émotion ressenti.
+        :param intensity: L'intensité de l'émotion.
         :return: True si l'émotion est ressentie, False si échec, None si impossible
         """
         pass
@@ -24,7 +28,9 @@ class IAgentMind(ABC):
         """
         Satisfait un besoin.
 
-        :return: Quantité satisfaite ou None si le besoin n'existe pas
+        :param need: Le type de besoin à satisfaire.
+        :param amount: La quantité pour satisfaire le besoin.
+        :return: La nouvelle valeur du besoin satisfait, None si impossible
         """
         pass
 

@@ -1,53 +1,40 @@
 from typing import Dict
+from app.core.agents.types.components.health import Health
+from app.core.agents.types.components.energy import Energy
+from app.core.agents.types.components.experience import Experience
 
 
 class AgentBase:
     def __init__(self, name: str):
         self.name = name
-        self.health = 100
-        self.energy = 100
-        self.experience = 0
-        self.level = 1
-        self.max_health = 100
-        self.max_energy = 100
+        self.health = Health(100, 100)
+        self.energy = Energy(100, 100)
+        self.experience = Experience()
 
     def get_stats(self) -> Dict[str, float]:
         """Retourne les statistiques de base"""
         return {
             "name": self.name,
-            "health": self.health,
-            "energy": self.energy,
-            "experience": self.experience,
-            "level": self.level,
+            "health": self.health.current,
+            "max_health": self.health.maximum,
+            "energy": self.energy.current,
+            "max_energy": self.energy.maximum,
+            "experience": self.experience.current,
+            "level": self.experience.level,
         }
 
     def modify_health(self, amount: float) -> None:
         """Modifie les points de vie"""
-        self.health = max(0, min(self.max_health, self.health + amount))
+        self.health.modify(amount)
 
-    def modify_energy(self, amount: float) -> None:
+    def modify_energy(self, amount: float) -> bool:
         """Modifie l'énergie"""
-        self.energy = max(0, min(self.max_energy, self.energy + amount))
+        return self.energy.modify(amount)
 
     def gain_experience(self, amount: float) -> None:
         """Gagne de l'expérience"""
-        self.experience += amount
-        self.check_level_up()
-
-    def check_level_up(self) -> None:
-        """Vérifie la montée de niveau"""
-        exp_needed = self.level * 100
-        if self.experience >= exp_needed:
-            self.level_up()
-
-    def level_up(self) -> None:
-        """Monte de niveau"""
-        self.level += 1
-        self.max_health += 10
-        self.max_energy += 5
-        self.health = self.max_health
-        self.energy = self.max_energy
+        self.experience.gain(amount)
 
     def is_alive(self) -> bool:
         """Vérifie si l'agent est en vie"""
-        return self.health > 0
+        return self.health.is_alive()

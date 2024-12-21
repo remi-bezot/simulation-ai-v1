@@ -17,15 +17,18 @@ class AgentStats(IAgentStats):
         }
 
     def update_stat(self, stat: str, value: float) -> None:
-        """Met à jour une statistique en respectant ses limites"""
+        """
+        Met à jour une statistique en respectant ses limites.
+
+        :param stat: Le nom de la statistique à mettre à jour.
+        :param value: La valeur à ajouter à la statistique.
+        """
         if stat in self.__dict__:
             current = getattr(self, stat)
             if stat in self.stats_limits:
                 min_val, max_val = self.stats_limits[stat]
-                new_val = max(min_val, min(value, max_val))
-            else:
-                new_val = value
-            setattr(self, stat, new_val)
+                new_value = max(min_val, min(max_val, current + value))
+                setattr(self, stat, new_value)
 
     def get_stats(self) -> Dict[str, float]:
         """Retourne toutes les statistiques"""

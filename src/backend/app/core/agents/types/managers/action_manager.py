@@ -6,6 +6,10 @@ from app.core.agents.types.interfaces.i_action_manager import IActionManager
 
 
 class AgentActionManager(IActionManager):
+    """
+    Gère les actions des agents.
+    """
+
     def __init__(self):
         self.skills = Skills()
         self.resources = Resources()
@@ -17,10 +21,32 @@ class AgentActionManager(IActionManager):
     def register_action(
         self, action_name: str, action: AgentAction, energy_cost: float = 10.0
     ) -> None:
-        """Enregistre une nouvelle action disponible"""
+        """
+        Enregistre une nouvelle action disponible.
+
+        :param action_name: Le nom de l'action.
+        :param action: L'action à enregistrer.
+        :param energy_cost: Le coût en énergie de l'action.
+        """
         if action_name not in self.available_actions:
             self.available_actions[action_name] = action
             self.action_costs[action_name] = energy_cost
+
+    def perform_action(self, action_name: str) -> Optional[bool]:
+        """
+        Exécute une action enregistrée.
+
+        :param action_name: Le nom de l'action à exécuter.
+        :return: True si l'action est réussie, False si échouée, None si pas d'action
+        """
+        if action_name in self.available_actions:
+            action = self.available_actions[action_name]
+            if self.resources.energy >= self.action_costs[action_name]:
+                self.current_action = action
+                self.resources.energy -= self.action_costs[action_name]
+                self.action_history.append(action)
+                return action.execute()
+        return None
 
     def can_perform_action(self, action_name: str, agent) -> bool:
         """Vérifie si l'agent peut effectuer l'action"""
