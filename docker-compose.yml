@@ -5,7 +5,7 @@ services:
     image: postgres:15
     container_name: postgres
     env_file:
-      - .env
+      - .env # Variables d'environnement pour PostgreSQL
     ports:
       - "5432:5432"
     volumes:
@@ -104,8 +104,8 @@ services:
 
   test-backend:
     build:
-      context: ./tests/backend
-      dockerfile: ../../docker/tests/backend/Dockerfile
+      context: ./docker/tests/backend # Tests backend dans docker/tests/backend
+      dockerfile: Dockerfile
     container_name: test-backend
     depends_on:
       db:
@@ -120,8 +120,8 @@ services:
 
   test-frontend:
     build:
-      context: ./tests/frontend
-      dockerfile: ../../docker/tests/frontend/Dockerfile
+      context: ./docker/tests/frontend # Tests frontend dans docker/tests/frontend
+      dockerfile: Dockerfile
     container_name: test-frontend
     depends_on:
       backend:

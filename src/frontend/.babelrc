@@ -1,0 +1,8 @@
+{
+    "presets": [
+      "@babel/preset-env",         // Transforme le code en version compatible avec les navigateurs
+      "@babel/preset-react",       // Prend en charge JSX
+      "@babel/preset-typescript"   // Prend en charge TypeScript
+    ]
+  }
+  

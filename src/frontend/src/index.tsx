@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import MainApp from "src/MainApp";
+import MainApp from "src/App";
 import "src/index.css"; // Utilisation de l'alias
 
 const root = ReactDOM.createRoot(

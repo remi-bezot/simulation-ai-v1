@@ -1,16 +1,10 @@
 import React from "react";
-import Header from "src/components/shared/Header"; // Utilisation de l'alias
-import Footer from "src/components/shared/Footer"; // Utilisation de l'alias
 
-const Home: React.FC = () => {
+const Home = () => {
   return (
     <div>
-      <Header />
-      <main>
-        <h1>Welcome to the Home Page!</h1>
-        <p>This is the home page of your app.</p>
-      </main>
-      <Footer />
+      <h1>Bienvenue dans Simulation AI</h1>
+      <p>Explorez les fonctionnalités de l'application à partir du menu.</p>
     </div>
   );
 };

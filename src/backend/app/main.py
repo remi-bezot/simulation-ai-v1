@@ -1,12 +1,67 @@
 from fastapi import FastAPI
-from app.routers import agents_router, multiverse_router
+from app.core.config.settings import get_cors_origins
+from app.core.logging.logging_config import setup_logger
+from app.core.middleware.middlewares import setup_middlewares
+from app.presentation.routers import include_routers
+from app.core.exceptions.handlers import (
+    http_exception_handler,
+    global_exception_handler,
+)
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
-app = FastAPI(title="Simulation AI v3")
+# Initialisation de l'application
+app = FastAPI(
+    title="Simulation AI v3",
+    description="Une API modulaire pour la gestion des agents, multivers et événements.",
+    version="3.0.1",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json",
+)
 
-app.include_router(agents_router.router, prefix="/api/agents")
-app.include_router(multiverse_router.router, prefix="/api/multiverse")
+# Configuration
+logger = setup_logger()
+origins = get_cors_origins()
+
+# Middleware
+setup_middlewares(app, origins)
+
+# Gestion des erreurs
+app.add_exception_handler(StarletteHTTPException, http_exception_handler)
+app.add_exception_handler(Exception, global_exception_handler)
+
+# Inclusion des routers
+include_routers(app)
+logger.info("Routes incluses : %s", app.openapi().get("paths", {}).keys())
 
 
+# Routes principales
 @app.get("/")
 def root():
+    """Route racine pour tester l'accès au serveur."""
+    logger.info("Accès à la route racine.")
     return {"message": "Bienvenue dans Simulation AI v3!"}
+
+
+@app.get("/health")
+def health_check():
+    """Route de vérification de l'état du serveur."""
+    logger.info("Vérification de l'état du serveur.")
+    return {
+        "status": "ok",
+        "version": "3.0.1",
+        "message": "Le serveur est opérationnel.",
+    }
+
+
+# Lancer l'application uniquement si elle est exécutée directement
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(
+        "app.main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+        log_level="info",
+    )
