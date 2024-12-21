@@ -3,18 +3,18 @@ from typing import Dict, Optional
 from app.core.agents.stats.metrics.performance import PerformanceCalculator
 from app.core.agents.stats.metrics.efficiency import EfficiencyCalculator
 from app.core.agents.stats.metrics.durability import DurabilityCalculator
-from ..exceptions.metrics_exception import MetricsException
+from app.core.agents.exceptions.metrics_exception import MetricsException
 
 
 @dataclass
 class MetricsManager:
     """Gestionnaire des métriques d'un agent"""
 
-    def get_metrics(self, stats: Dict) -> Dict[str, float]:
+    def get_metrics(self, stats: Optional[Dict]) -> Dict[str, float]:
         """
         Retourne toutes les métriques calculées pour l'agent.
 
-        :param stats: Dictionnaire contenant les statistiques de l'agent
+        :param stats: Dictionnaire contenant les statistiques de l'agent, peut être None
         :return: Dictionnaire contenant toutes les métriques calculées
         :raises ValueError: Si les statistiques sont invalides
         """
@@ -40,8 +40,8 @@ class MetricsManager:
 
             return metrics
 
-        except Exception as e:
-            raise ValueError(f"Erreur lors du calcul des métriques: {str(e)}")
+        except MetricsException as e:
+            raise ValueError(f"Erreur lors du calcul des métriques: {e}")
 
     def _safe_calculate(self, calculator_func, stats: Dict) -> float:
         """

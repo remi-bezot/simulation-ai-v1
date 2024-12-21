@@ -7,13 +7,17 @@ from app.core.agents.types.base.base_agent_type import VitalStats
 class StatsCalculator:
     """Calcule les différentes statistiques d'un agent"""
 
-    def calculate_health_stats(self, health: VitalStats) -> Dict[str, any]:
+    def calculate_health_stats(self, health: Optional[VitalStats]) -> Dict[str, any]:
         """
         Calcule les statistiques de santé.
 
-        :param health: Les statistiques vitales de santé.
+        :param health: Les statistiques vitales de santé, peut être None.
         :return: Un dictionnaire contenant les statistiques de santé.
+        :raises ValueError: Si les statistiques de santé sont invalides.
         """
+        if health is None:
+            raise ValueError("Les statistiques de santé ne peuvent pas être None")
+
         return {
             "current": health.current,
             "maximum": health.maximum,
@@ -66,10 +70,12 @@ class StatsCalculator:
         :param health: Les statistiques vitales de santé.
         :return: Le statut de santé.
         """
-        if health.current == health.maximum:
-            return "Healthy"
-        elif health.current > health.maximum * 0.5:
-            return "Injured"
+        if health.current >= health.maximum * 0.75:
+            return "Good"
+        elif health.current >= health.maximum * 0.5:
+            return "Fair"
+        elif health.current >= health.maximum * 0.25:
+            return "Poor"
         else:
             return "Critical"
 
@@ -94,7 +100,7 @@ class StatsCalculator:
         :param stats: Les statistiques vitales.
         :return: Le taux de régénération.
         """
-        return stats.maximum * 0.01
+        return stats.regeneration_rate
 
     def _calculate_consumption_rate(self, energy: VitalStats) -> float:
         """Calcule le taux de consommation d'énergie"""

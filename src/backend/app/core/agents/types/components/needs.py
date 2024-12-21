@@ -37,6 +37,22 @@ class NeedDefinition:
 
 
 @dataclass
+class Need:
+    name: str
+    category: NeedCategory
+    urgency: NeedUrgency
+    value: float = 0.0
+    history: List[Tuple[datetime, float]] = field(default_factory=list)
+
+    def update_value(self, new_value: float):
+        self.value = new_value
+        self.history.append((datetime.now(), new_value))
+
+    def get_average_value(self) -> float:
+        return mean([value for _, value in self.history])
+
+
+@dataclass
 class Needs:
     """Système avancé de gestion des besoins pour agents intelligents"""
 
@@ -222,7 +238,7 @@ class Needs:
             categorized[category][need] = value
         return categorized
 
-    def get_category_satisfaction(self) -> float:
+    def get_category_satisfaction(self, category: NeedCategory) -> float:
         """Calcule le niveau de satisfaction moyen pour une catégorie"""
         needs = {
             need: value

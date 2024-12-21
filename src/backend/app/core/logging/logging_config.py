@@ -7,7 +7,7 @@ def setup_logger():
     """
     Configure et retourne le logger principal.
     """
-    log_level = settings.LOG_LEVEL.upper() if hasattr(settings, "LOG_LEVEL") else "INFO"
+    log_level = settings.LOG_LEVEL
 
     LOGGING_CONFIG = {
         "version": 1,
@@ -25,11 +25,11 @@ def setup_logger():
             },
         },
         "root": {
-            "level": log_level,
             "handlers": ["console"],
+            "level": log_level,
         },
     }
 
     dictConfig(LOGGING_CONFIG)
-    logger = logging.getLogger("simulation-ai")
+    logger = logging.getLogger("simulation_ai_v3")
     return logger

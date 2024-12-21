@@ -22,6 +22,16 @@ class IActionManager(ABC):
         pass
 
     @abstractmethod
+    def get_registered_actions(self) -> Dict[str, AgentAction]:
+        """Retourne un dictionnaire des actions enregistrées"""
+        pass
+
+    @abstractmethod
+    def get_action_energy_costs(self) -> Dict[str, float]:
+        """Retourne un dictionnaire des coûts énergétiques des actions"""
+        pass
+
+    @abstractmethod
     def execute_current_action(self, agent) -> bool:
         """Exécute l'action en cours"""
         pass

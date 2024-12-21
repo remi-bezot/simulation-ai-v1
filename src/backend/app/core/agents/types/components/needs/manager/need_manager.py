@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 from datetime import datetime
 from ..enums.need_category import NeedCategory
 from ..enums.need_urgency import NeedUrgency
@@ -24,73 +24,79 @@ class NeedManager(INeedManager):
     current_needs: Dict[str, float] = field(init=False)
 
     def __post_init__(self):
-        self.current_needs = {
-            need: 0.0 for need in self.need_provider.get_needs().keys()
-        }
-        self.need_history: List[Dict] = []
+        self.current_needs = self.need_provider.provide_needs()
 
-    def update_need(self, need: str, amount: float) -> None:
-        """Met à jour un besoin spécifique"""
-        if need not in self.current_needs:
-            raise ValueError(f"Besoin invalide: {need}")
+    def validate_needs(self):
+        for need, value in self.current_needs.items():
+            self.validator.validate(need, value)
 
-        self.current_needs[need] = max(
-            0.0, min(100.0, self.current_needs[need] + amount)
-        )
-        self.recorder.record_change(need, self.current_needs[need], datetime.now())
-        self._notify_observers(need)
+    def record_needs(self):
+        for need, value in self.current_needs.items():
+            self.recorder.record(need, value)
 
-    def get_need_status(self, need: str) -> Dict:
-        """Retourne le statut détaillé d'un besoin"""
-        if need not in self.current_needs:
-            raise ValueError(f"Besoin invalide: {need}")
+    def calculate_priorities(self):
+        priorities = {}
+        for need, value in self.current_needs.items():
+            urgency = self.determine_urgency(value)
+            priorities[need] = self.priority_calculator.calculate(need, value, urgency)
+        return priorities
 
-        return {
-            "current": self.current_needs[need],
-            "threshold": self.need_provider.get_needs()[need].threshold,
-            "priority": self.priority_calculator.calculate(
-                need,
-                self.need_provider.get_needs()[need].priority,
-                self._calculate_urgency(need).value,
-                self.current_needs[need],
-            ),
-            "category": self.need_provider.get_needs()[need].category.value,
-            "urgency": self._calculate_urgency(need),
-        }
+    def determine_urgency(self, value: float) -> NeedUrgency:
+        if value < 0.25:
+            return NeedUrgency.EMERGENCY
+        elif value < 0.5:
+            return NeedUrgency.CRITICAL
+        elif value < 0.75:
+            return NeedUrgency.WARNING
+        else:
+            return NeedUrgency.NORMAL
 
-    def get_critical_needs(self) -> Dict[str, float]:
-        """Retourne les besoins critiques"""
-        return {
-            need: value
-            for need, value in self.current_needs.items()
-            if value >= self.need_provider.get_needs()[need].threshold
-        }
+    def notify_observers(self):
+        for observer in self.observers:
+            observer.update(self.current_needs)
 
-    def add_observer(self, observer: INeedObserver) -> None:
-        """Ajoute un observateur"""
+    def update_needs(self, new_needs: Dict[str, float]):
+        self.current_needs.update(new_needs)
+        self.validate_needs()
+        self.record_needs()
+        self.notify_observers()
+
+    def get_need_status(self, need: str) -> Optional[float]:
+        return self.current_needs.get(need)
+
+    def remove_need(self, need: str):
+        if need in self.current_needs:
+            del self.current_needs[need]
+            self.notify_observers()
+
+    def add_observer(self, observer: INeedObserver):
         if observer not in self.observers:
             self.observers.append(observer)
 
-    def remove_observer(self, observer: INeedObserver) -> None:
-        """Supprime un observateur"""
+    def remove_observer(self, observer: INeedObserver):
         if observer in self.observers:
             self.observers.remove(observer)
 
-    def _calculate_urgency(self, need: str) -> NeedUrgency:
-        """Calcule l'urgence d'un besoin"""
-        value = self.current_needs[need]
-        for urgency in reversed(NeedUrgency):
-            if (
-                value
-                >= self.need_provider.get_needs()[need].threshold
-                * urgency.get_threshold()
-            ):
-                return urgency
-        return NeedUrgency.NORMAL
+    def get_all_needs(self) -> Dict[str, float]:
+        return self.current_needs
 
-    def _notify_observers(self, need: str) -> None:
-        """Notifie les observateurs d'un changement"""
-        for observer in self.observers:
-            observer.on_registry_change(
-                "update", need, self.need_provider.get_needs()[need]
-            )
+    def get_prioritized_needs(self) -> List[Tuple[str, int]]:
+        priorities = self.calculate_priorities()
+        return sorted(priorities.items(), key=lambda item: item[1], reverse=True)
+
+    def add_need(self, need: NeedDefinition, value: float):
+        self.current_needs[need.name] = value
+        self.notify_observers()
+
+    def get_needs_by_category(self, category: NeedCategory) -> Dict[str, float]:
+        return {
+            need: value
+            for need, value in self.current_needs.items()
+            if need.category == category
+        }
+
+    def get_needs_history(self) -> Dict[str, List[Tuple[datetime, float]]]:
+        return {need: self.recorder.get_history(need) for need in self.current_needs}
+
+
+# Ajoutez ici les autres méthodes et classes nécessaires

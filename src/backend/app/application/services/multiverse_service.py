@@ -5,7 +5,7 @@ from app.application.interfaces.multiverse_interface import IMultiverseService
 from app.application.utils.exceptions import MultiverseNotFoundError
 from app.application.utils.decorators import handle_sqlalchemy_errors
 from app.application.repositories.multiverse_repository import MultiverseRepository
-from app.core.logging.logger import logger
+from src.backend.app.core.logging.logging_config import logger
 
 
 class MultiverseService(IMultiverseService):

@@ -32,6 +32,16 @@ class Settings(BaseSettings):
         description="Liste des origines CORS autorisées.",
     )
 
+    # Configuration du logger
+    LOG_LEVEL: str = Field("INFO", description="Niveau de log de l'application.")
+
+    @validator("LOG_LEVEL")
+    def validate_log_level(cls, v):
+        levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        if v.upper() not in levels:
+            raise ValueError(f"Invalid log level: {v}")
+        return v.upper()
+
     @validator("CORS_ALLOWED_ORIGINS", pre=True)
     def split_origins(cls, value: str) -> List[str]:
         """

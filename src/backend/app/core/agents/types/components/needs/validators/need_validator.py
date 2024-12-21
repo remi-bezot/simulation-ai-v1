@@ -12,24 +12,22 @@ class NeedValidator:
 
     config: NeedConfig
 
-    def validate(self, need_id: str, value: float) -> bool:
+    def validate(self, need_id: str, value: Optional[float]) -> bool:
         """
         Valide une valeur de besoin
         :raises NeedValidationException: Si la validation échoue
         """
         errors: List[str] = []
 
-        if not isinstance(value, (int, float)):
+        if value is None:
+            errors.append("La valeur ne peut pas être None")
+        elif not isinstance(value, (int, float)):
             errors.append(f"La valeur doit être numérique, reçu: {type(value)}")
 
-        if not self.config.MIN_VALUE <= value <= self.config.MAX_VALUE:
-            errors.append(
-                f"La valeur doit être entre {self.config.MIN_VALUE} et {self.config.MAX_VALUE}"
-            )
-
         if errors:
-            raise NeedValidationException("\n".join(errors), need_id, value)
+            raise NeedValidationException(errors)
 
+        # Ajoutez ici d'autres règles de validation basées sur la configuration
         return True
 
     def validate_silent(self, need_id: str, value: float) -> bool:
@@ -39,7 +37,7 @@ class NeedValidator:
         except NeedValidationException:
             return False
 
-    def validate(self, definition: NeedDefinition) -> None:
+    def validate_definition(self, definition: NeedDefinition) -> None:
         errors: List[str] = []
 
         if not 0 <= definition.threshold <= 100:

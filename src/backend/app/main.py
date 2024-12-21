@@ -8,6 +8,7 @@ from app.core.exceptions.handlers import (
     global_exception_handler,
 )
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 # Initialisation de l'application
 app = FastAPI(
@@ -23,16 +24,24 @@ app = FastAPI(
 logger = setup_logger()
 origins = get_cors_origins()
 
+# Configuration CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Middleware
-setup_middlewares(app, origins)
+setup_middlewares(app)
+
+# Inclusion des routes
+include_routers(app)
 
 # Gestion des erreurs
 app.add_exception_handler(StarletteHTTPException, http_exception_handler)
 app.add_exception_handler(Exception, global_exception_handler)
-
-# Inclusion des routers
-include_routers(app)
-logger.info("Routes incluses : %s", app.openapi().get("paths", {}).keys())
 
 
 # Routes principales
@@ -58,10 +67,4 @@ def health_check():
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(
-        "app.main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True,
-        log_level="info",
-    )
+    uvicorn.run(app, host="0.0.0.0", port=8000)

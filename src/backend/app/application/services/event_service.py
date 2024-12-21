@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from app.application.interfaces.event_interface import EventInterface
 from src.backend.app.application.managers.event_manager import EventManager
 from app.application.repositories.event_repository import EventRepository
-from app.core.logging.logger import logger
+from src.backend.app.core.logging.logging_config import logger
 from typing import List, Dict, Any
 
 
